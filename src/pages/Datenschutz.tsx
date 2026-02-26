@@ -59,7 +59,7 @@ export default function Datenschutz() {
           <section>
             <h2 className="text-lg font-semibold text-foreground mb-3">4. Sprachverarbeitung und Transkription</h2>
             <p>
-              SalesCopilot nutzt Ihr Browser-Mikrofon zur Echtzeit-Transkription von Gesprächen. Die Audiodaten werden in Echtzeit an den Transkriptionsdienst (ElevenLabs) übermittelt und dort verarbeitet. Es erfolgt keine dauerhafte Speicherung der Audiodaten durch uns. Die Transkripte werden nur während der aktiven Session im Browser gehalten und nicht serverseitig gespeichert.
+              SalesCopilot nutzt Ihr Browser-Mikrofon zur Echtzeit-Transkription von Gesprächen. Die Audiodaten werden in Echtzeit an den Transkriptionsdienst (Gladia) übermittelt und dort verarbeitet. Es erfolgt keine dauerhafte Speicherung der Audiodaten durch uns. Die Transkripte werden nur während der aktiven Session im Browser gehalten und nicht serverseitig gespeichert.
             </p>
           </section>
 

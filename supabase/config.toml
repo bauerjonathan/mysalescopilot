@@ -1,6 +1,6 @@
 project_id = "xynmvdrxpceiwbglrpuy"
 
-[functions.elevenlabs-scribe-token]
+[functions.gladia-session-init]
 verify_jwt = false
 
 [functions.sales-copilot-suggest]
