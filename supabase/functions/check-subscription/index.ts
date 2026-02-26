@@ -58,9 +58,14 @@ serve(async (req) => {
     let subscriptionEnd = null;
 
     if (hasActiveSub) {
-      subscriptionEnd = new Date(
-        subscriptions.data[0].current_period_end * 1000
-      ).toISOString();
+      try {
+        const endTs = subscriptions.data[0].current_period_end;
+        if (endTs && typeof endTs === "number") {
+          subscriptionEnd = new Date(endTs * 1000).toISOString();
+        }
+      } catch {
+        // ignore date parsing errors
+      }
     }
 
     return new Response(
