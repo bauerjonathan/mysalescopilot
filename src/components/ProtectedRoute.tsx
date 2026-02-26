@@ -1,11 +1,14 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Lock, CreditCard, LogOut } from "lucide-react";
+import { Loader2, Lock, LogOut } from "lucide-react";
+import { TIERS } from "@/config/tiers";
+import { Check, ArrowRight } from "lucide-react";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading, subscription, createCheckout, signOut } = useAuth();
+  const navigate = useNavigate();
 
   if (loading || subscription.loading) {
     return (
@@ -20,36 +23,67 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (!subscription.subscribed) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <Card className="w-full max-w-md text-center">
-          <CardHeader>
+        <div className="w-full max-w-4xl">
+          <div className="text-center mb-8">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Lock className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle>Abo erforderlich</CardTitle>
-            <CardDescription>
-              Um SalesCopilot zu nutzen, benötigst du ein aktives Abonnement.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="rounded-lg border border-primary/20 bg-primary/5 p-4 mb-1">
-              <p className="text-sm font-medium text-foreground mb-1">🎉 14 Tage kostenlos testen</p>
-              <p className="text-xs text-muted-foreground">
-                Starte jetzt deine Testphase – du zahlst erst nach 14 Tagen. Jederzeit vorher kündbar, komplett risikofrei.
-              </p>
-            </div>
-            <Button onClick={createCheckout} className="w-full gap-2">
-              <CreditCard className="h-4 w-4" />
-              Kostenlos testen – danach 25€/Monat
-            </Button>
-            <Button variant="ghost" onClick={signOut} className="w-full gap-2">
+            <h2 className="text-2xl font-bold">Plan auswählen</h2>
+            <p className="text-muted-foreground mt-2">
+              Wähle den passenden Plan für deine Anforderungen.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {(Object.entries(TIERS) as [string, typeof TIERS[keyof typeof TIERS]][]).map(([key, tier]) => (
+              <Card
+                key={key}
+                className={`relative overflow-hidden ${key === "pro" ? "border-primary/50 shadow-lg shadow-primary/10" : "border-border/50"}`}
+              >
+                {key === "pro" && (
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
+                )}
+                <CardHeader>
+                  <CardTitle className="text-lg">{tier.name}</CardTitle>
+                  <CardDescription>
+                    {tier.minutes_limit === Infinity ? "Unbegrenzte" : `${tier.minutes_limit}`} Minuten/Monat
+                  </CardDescription>
+                  <div className="flex items-baseline gap-1 mt-2">
+                    <span className="text-4xl font-bold">{tier.price}€</span>
+                    <span className="text-sm text-muted-foreground">/Monat</span>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <ul className="space-y-2">
+                    {tier.features.map((f) => (
+                      <li key={f} className="flex items-center gap-2 text-sm">
+                        <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    className="w-full gap-1.5"
+                    variant={key === "pro" ? "default" : "outline"}
+                    onClick={() => createCheckout(tier.price_id)}
+                  >
+                    Jetzt starten <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-6">
+            <Button variant="ghost" onClick={signOut} className="gap-2">
               <LogOut className="h-4 w-4" />
               Abmelden
             </Button>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground mt-2">
               Eingeloggt als {user.email}
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,10 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { getTierByProductId, TIERS, TierKey } from "@/config/tiers";
 import type { User, Session } from "@supabase/supabase-js";
 
 interface SubscriptionState {
   subscribed: boolean;
   subscriptionEnd: string | null;
+  productId: string | null;
+  tier: TierKey | null;
+  minutesUsed: number;
+  minutesLimit: number;
   loading: boolean;
 }
 
@@ -15,6 +20,10 @@ export function useAuth() {
   const [subscription, setSubscription] = useState<SubscriptionState>({
     subscribed: false,
     subscriptionEnd: null,
+    productId: null,
+    tier: null,
+    minutesUsed: 0,
+    minutesLimit: 0,
     loading: true,
   });
 
@@ -22,9 +31,15 @@ export function useAuth() {
     try {
       const { data, error } = await supabase.functions.invoke("check-subscription");
       if (error) throw error;
+      const tier = data.product_id ? getTierByProductId(data.product_id) : null;
+      const minutesLimit = tier ? TIERS[tier].minutes_limit : 0;
       setSubscription({
         subscribed: data.subscribed ?? false,
         subscriptionEnd: data.subscription_end ?? null,
+        productId: data.product_id ?? null,
+        tier,
+        minutesUsed: data.minutes_used ?? 0,
+        minutesLimit: minutesLimit === Infinity ? 999999 : minutesLimit,
         loading: false,
       });
     } catch {
@@ -41,7 +56,7 @@ export function useAuth() {
         if (session?.user) {
           setTimeout(checkSubscription, 0);
         } else {
-          setSubscription({ subscribed: false, subscriptionEnd: null, loading: false });
+          setSubscription({ subscribed: false, subscriptionEnd: null, productId: null, tier: null, minutesUsed: 0, minutesLimit: 0, loading: false });
         }
       }
     );
@@ -56,7 +71,6 @@ export function useAuth() {
     return () => authSub.unsubscribe();
   }, [checkSubscription]);
 
-  // Auto-refresh subscription every 60s
   useEffect(() => {
     if (!user) return;
     const interval = setInterval(checkSubscription, 60000);
@@ -77,8 +91,10 @@ export function useAuth() {
     await supabase.auth.signOut();
   };
 
-  const createCheckout = async () => {
-    const { data, error } = await supabase.functions.invoke("create-checkout");
+  const createCheckout = async (priceId: string) => {
+    const { data, error } = await supabase.functions.invoke("create-checkout", {
+      body: { priceId },
+    });
     if (error) throw error;
     if (data?.url) window.open(data.url, "_blank");
   };

@@ -29,8 +29,7 @@ serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
     if (userError || !userData.user?.email) {
-      // Session expired or invalid — treat as not subscribed
-      return new Response(JSON.stringify({ subscribed: false, subscription_end: null }), {
+      return new Response(JSON.stringify({ subscribed: false, subscription_end: null, product_id: null }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
@@ -41,7 +40,7 @@ serve(async (req) => {
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
 
     if (customers.data.length === 0) {
-      return new Response(JSON.stringify({ subscribed: false }), {
+      return new Response(JSON.stringify({ subscribed: false, product_id: null }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
@@ -54,22 +53,45 @@ serve(async (req) => {
       limit: 1,
     });
 
-    const hasActiveSub = subscriptions.data.length > 0;
-    let subscriptionEnd = null;
-
-    if (hasActiveSub) {
-      try {
-        const endTs = subscriptions.data[0].current_period_end;
-        if (endTs && typeof endTs === "number") {
-          subscriptionEnd = new Date(endTs * 1000).toISOString();
-        }
-      } catch {
-        // ignore date parsing errors
-      }
+    // Also check trialing (from old subscriptions)
+    let sub = subscriptions.data[0];
+    if (!sub) {
+      const trialSubs = await stripe.subscriptions.list({
+        customer: customerId,
+        status: "trialing",
+        limit: 1,
+      });
+      sub = trialSubs.data[0];
     }
 
+    if (!sub) {
+      return new Response(JSON.stringify({ subscribed: false, product_id: null }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
+    const subscriptionEnd = new Date(sub.current_period_end * 1000).toISOString();
+    const productId = sub.items.data[0]?.price?.product as string;
+
+    // Get usage for current month
+    const now = new Date();
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    
+    const { data: usageData } = await supabaseClient
+      .from("usage_tracking")
+      .select("minutes_used")
+      .eq("user_id", user.id)
+      .eq("month", currentMonth)
+      .single();
+
     return new Response(
-      JSON.stringify({ subscribed: hasActiveSub, subscription_end: subscriptionEnd }),
+      JSON.stringify({
+        subscribed: true,
+        subscription_end: subscriptionEnd,
+        product_id: productId,
+        minutes_used: usageData?.minutes_used ?? 0,
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (error) {
