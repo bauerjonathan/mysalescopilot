@@ -6,11 +6,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Index from "./pages/Index";
+import CompanyProfile from "./pages/CompanyProfile";
 import Impressum from "./pages/Impressum";
 import Contact from "./pages/Contact";
 import Datenschutz from "./pages/Datenschutz";
 import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AppLayout } from "./components/AppLayout";
 
 const queryClient = new QueryClient();
 
@@ -27,14 +29,16 @@ const App = () => (
             path="/app"
             element={
               <ProtectedRoute>
-                <Index />
+                <AppLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<Index />} />
+            <Route path="firma" element={<CompanyProfile />} />
+          </Route>
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
           <Route path="/kontakt" element={<Contact />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

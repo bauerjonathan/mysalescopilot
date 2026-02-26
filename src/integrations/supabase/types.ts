@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      company_profiles: {
+        Row: {
+          additional_context: string | null
+          company_name: string | null
+          created_at: string
+          id: string
+          pain_points: string | null
+          product_description: string | null
+          target_audience: string | null
+          unique_selling_points: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          additional_context?: string | null
+          company_name?: string | null
+          created_at?: string
+          id?: string
+          pain_points?: string | null
+          product_description?: string | null
+          target_audience?: string | null
+          unique_selling_points?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          additional_context?: string | null
+          company_name?: string | null
+          created_at?: string
+          id?: string
+          pain_points?: string | null
+          product_description?: string | null
+          target_audience?: string | null
+          unique_selling_points?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       usage_tracking: {
         Row: {
           created_at: string
