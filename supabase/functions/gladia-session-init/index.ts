@@ -8,11 +8,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const TIER_LIMITS: Record<string, number> = {
-  "prod_U39xCTjLLk9Qwk": 200,
-  "prod_U39xmXr3fgq0jw": 500,
-  "prod_U39yD4VzCOAXVY": 999999,
-};
+const FREE_MINUTES_LIMIT = 5;
+const UNLIMITED_PRODUCT_ID = "prod_U3CAfkL2MndN2d";
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -38,21 +35,25 @@ serve(async (req) => {
 
     const user = userData.user;
 
-    // Check subscription via Stripe
+    // Determine tier: check Stripe for unlimited, otherwise free
+    let limit = FREE_MINUTES_LIMIT;
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    if (customers.data.length === 0) throw new Error("Kein aktives Abonnement");
 
-    const subs = await stripe.subscriptions.list({ customer: customers.data[0].id, status: "active", limit: 1 });
-    let sub = subs.data[0];
-    if (!sub) {
-      const trialSubs = await stripe.subscriptions.list({ customer: customers.data[0].id, status: "trialing", limit: 1 });
-      sub = trialSubs.data[0];
+    if (customers.data.length > 0) {
+      const subs = await stripe.subscriptions.list({ customer: customers.data[0].id, status: "active", limit: 1 });
+      let sub = subs.data[0];
+      if (!sub) {
+        const trialSubs = await stripe.subscriptions.list({ customer: customers.data[0].id, status: "trialing", limit: 1 });
+        sub = trialSubs.data[0];
+      }
+      if (sub) {
+        const productId = sub.items.data[0]?.price?.product as string;
+        if (productId === UNLIMITED_PRODUCT_ID) {
+          limit = 999999;
+        }
+      }
     }
-    if (!sub) throw new Error("Kein aktives Abonnement");
-
-    const productId = sub.items.data[0]?.price?.product as string;
-    const limit = TIER_LIMITS[productId] ?? 0;
 
     // Check usage
     const now = new Date();
