@@ -192,56 +192,55 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            <div className="rounded-xl border border-border bg-card p-1 shadow-2xl shadow-primary/5">
-              <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
-                <div className="h-2.5 w-2.5 rounded-full bg-destructive/60" />
-                <div className="h-2.5 w-2.5 rounded-full bg-accent/60" />
-                <div className="h-2.5 w-2.5 rounded-full bg-primary/60" />
-                <span className="ml-2 text-xs text-muted-foreground font-mono">
+            <div className="rounded-xl border border-white/10 overflow-hidden shadow-2xl shadow-primary/10 bg-[hsl(220,18%,10%)]">
+              {/* Window chrome */}
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-[hsl(220,18%,8%)] border-b border-white/10">
+                <div className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+                <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
+                <div className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
+                <span className="ml-2 text-xs text-white/40 font-mono">
                   SalesCopilot — Live Session
                 </span>
               </div>
-              <div className="grid grid-cols-2 divide-x divide-border">
+              <div className="grid grid-cols-2 divide-x divide-white/10">
+                {/* Transcript */}
                 <div className="p-4 space-y-3">
-                  <p className="text-xs text-muted-foreground font-mono mb-2">
+                  <p className="text-xs text-white/40 font-mono mb-2 tracking-wider">
                     TRANSKRIPT
                   </p>
-                  <div className="space-y-2.5">
-                    <p className="text-sm">
-                      <span className="text-[hsl(var(--transcript-user))] font-medium">
-                        Du:
-                      </span>{" "}
-                      <span className="text-foreground/80">
+                  <div className="space-y-3">
+                    <p className="text-sm leading-relaxed">
+                      <span className="text-blue-400 font-medium">Du: </span>
+                      <span className="text-white/80">
                         Unsere Plattform automatisiert Ihre komplette Rechnungsstellung – von der Erstellung bis zum Versand.
                       </span>
                     </p>
-                    <p className="text-sm">
-                      <span className="text-[hsl(var(--transcript-customer))] font-medium">
-                        Kunde:
-                      </span>{" "}
-                      <span className="text-foreground/80">
+                    <p className="text-sm leading-relaxed">
+                      <span className="text-amber-400 font-medium">Kunde: </span>
+                      <span className="text-white/80">
                         Das klingt gut, aber ehrlich gesagt haben wir gerade andere Prioritäten und kein Budget dafür eingeplant.
                       </span>
                     </p>
-                   </div>
+                  </div>
                 </div>
+                {/* AI Suggestions */}
                 <div className="p-4 space-y-3">
-                  <p className="text-xs text-muted-foreground font-mono mb-2">
+                  <p className="text-xs text-white/40 font-mono mb-2 tracking-wider">
                     KI-VORSCHLAG
                   </p>
-                  <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 mb-2">
-                    <p className="text-xs font-semibold text-destructive mb-1">
+                  <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 mb-2">
+                    <p className="text-xs font-semibold text-red-400 mb-1">
                       ⚡ Einwand erkannt: Budget
                     </p>
-                    <p className="text-sm text-foreground/80">
-                      „Verstehe ich – genau deshalb lohnt sich ein Blick: Unsere Kunden sparen im Schnitt <strong>12 Stunden pro Monat</strong>. Darf ich Ihnen kurz zeigen, wie sich das bei Ihnen rechnet?"
+                    <p className="text-sm text-white/80 leading-relaxed">
+                      „Verstehe ich – genau deshalb lohnt sich ein Blick: Unsere Kunden sparen im Schnitt <strong className="text-white">12 Stunden pro Monat</strong>. Darf ich Ihnen kurz zeigen, wie sich das bei Ihnen rechnet?"
                     </p>
                   </div>
-                  <div className="rounded-lg border border-green-600/40 bg-green-950/20 p-3">
-                    <p className="text-xs font-semibold text-green-500 mb-1">
+                  <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3">
+                    <p className="text-xs font-semibold text-emerald-400 mb-1">
                       💡 Alternativ
                     </p>
-                    <p className="text-sm text-foreground/80">
+                    <p className="text-sm text-white/80 leading-relaxed">
                       „Was wäre, wenn wir mit einem kostenlosen Pilotprojekt starten – ganz ohne Risiko für Sie?"
                     </p>
                   </div>
