@@ -35,7 +35,7 @@ interface Props {
 }
 
 export function SessionPreparation({ onStart }: Props) {
-  const { subscription, openCustomerPortal } = useAuth();
+  const { subscription, openCustomerPortal, createCheckout } = useAuth();
   const navigate = useNavigate();
 
   const isLimitReached =
@@ -43,12 +43,8 @@ export function SessionPreparation({ onStart }: Props) {
     subscription.minutesLimit < 999999 &&
     subscription.minutesUsed >= subscription.minutesLimit;
 
-  // Determine next tier for upgrade CTA
-  const tierKeys: TierKey[] = ["basic", "pro", "enterprise"];
-  const currentTierIndex = subscription.tier ? tierKeys.indexOf(subscription.tier) : -1;
-  const nextTier = currentTierIndex >= 0 && currentTierIndex < tierKeys.length - 1
-    ? TIERS[tierKeys[currentTierIndex + 1]]
-    : null;
+  // If on free tier, show upgrade to unlimited
+  const nextTier = subscription.tier === "free" ? TIERS.unlimited : null;
   const [context, setContext] = useState<CustomerContext>({
     name: "",
     company: "",
@@ -111,23 +107,16 @@ export function SessionPreparation({ onStart }: Props) {
                 </div>
               </div>
               <div className="flex gap-2">
-                {nextTier && (
+                {nextTier && nextTier.price_id && (
                   <Button
                     size="sm"
                     className="gap-1.5"
-                    onClick={openCustomerPortal}
+                    onClick={() => createCheckout(nextTier.price_id!)}
                   >
                     <ArrowUpCircle className="h-3.5 w-3.5" />
                     Upgrade auf {nextTier.name}
                   </Button>
                 )}
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={openCustomerPortal}
-                >
-                  Abo verwalten
-                </Button>
               </div>
             </div>
           )}

@@ -1,41 +1,24 @@
+export const FREE_MINUTES_LIMIT = 5;
+
 export const TIERS = {
-  basic: {
-    name: "Basic",
-    price_id: "price_1T53dYCk4HYIidoP3bVSRBPm",
-    product_id: "prod_U39xCTjLLk9Qwk",
-    price: 49,
-    minutes_limit: 200,
+  free: {
+    name: "Free",
+    price_id: null,
+    product_id: null,
+    price: 0,
+    minutes_limit: FREE_MINUTES_LIMIT,
     features: [
-      "200 Gesprächsminuten/Monat",
+      `${FREE_MINUTES_LIMIT} Test-Minuten`,
       "Echtzeit-Transkription",
       "KI-Antwortvorschläge",
       "Einwandbehandlung",
-      "Kundenkontext-Eingabe",
-      "Gesprächs-Zusammenfassungen",
     ],
   },
-  pro: {
-    name: "Pro",
-    price_id: "price_1T53dqCk4HYIidoPI4reRX9q",
-    product_id: "prod_U39xmXr3fgq0jw",
-    price: 99,
-    minutes_limit: 500,
-    features: [
-      "500 Gesprächsminuten/Monat",
-      "Echtzeit-Transkription",
-      "KI-Antwortvorschläge",
-      "Einwandbehandlung",
-      "Kundenkontext-Eingabe",
-      "Gesprächs-Zusammenfassungen",
-      "Prioritäts-Support",
-      "Alle zukünftigen Updates",
-    ],
-  },
-  enterprise: {
-    name: "Enterprise",
-    price_id: "price_1T53enCk4HYIidoP2ANnLu6R",
-    product_id: "prod_U39yD4VzCOAXVY",
-    price: 199,
+  unlimited: {
+    name: "Unlimited",
+    price_id: "price_1T55mQCk4HYIidoP59BFPcHJ",
+    product_id: "prod_U3CAfkL2MndN2d",
+    price: 29,
     minutes_limit: Infinity,
     features: [
       "Unbegrenzte Gesprächsminuten",
@@ -46,7 +29,6 @@ export const TIERS = {
       "Gesprächs-Zusammenfassungen",
       "Prioritäts-Support",
       "Alle zukünftigen Updates",
-      "Dedizierter Ansprechpartner",
     ],
   },
 } as const;
