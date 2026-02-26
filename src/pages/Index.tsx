@@ -27,9 +27,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <AppHeader />
-      <div className="flex-1">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
+      {phase !== "live" && <AppHeader />}
+      <div className="flex-1 overflow-hidden">
         {phase === "preparation" && <SessionPreparation onStart={handleStart} />}
         {phase === "live" && context && (
           <LiveSession context={context} onStop={handleStop} />
