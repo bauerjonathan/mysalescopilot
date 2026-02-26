@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import { motion } from "framer-motion";
 import { TIERS } from "@/config/tiers";
 import {
@@ -125,16 +125,16 @@ export default function Landing() {
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-primary/5 blur-[120px]" />
         </div>
         <div className="relative mx-auto max-w-4xl text-center">
-          <motion.div
+           <motion.div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
             custom={0}
           >
-            <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-xs font-medium">
+            <span className="inline-flex items-center rounded-full border border-border bg-secondary px-4 py-1.5 text-xs font-medium text-secondary-foreground mb-6">
               <Zap className="mr-1.5 h-3 w-3 text-primary" />
               KI-gestützter Sales-Assistent
-            </Badge>
+            </span>
           </motion.div>
 
           <motion.h1
@@ -368,7 +368,7 @@ export default function Landing() {
                   {key === "pro" && (
                     <>
                       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
-                      <Badge className="absolute top-4 right-4 bg-primary/10 text-primary border-primary/20">Beliebt</Badge>
+                      <span className="absolute top-4 right-4 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">Beliebt</span>
                     </>
                   )}
                   <CardHeader className="text-left">

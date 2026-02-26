@@ -48,13 +48,18 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
+    let initialCheckDone = false;
+
     const { data: { subscription: authSub } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
         if (session?.user) {
-          setTimeout(checkSubscription, 0);
+          if (initialCheckDone) {
+            // Only trigger on subsequent auth changes, not the initial one
+            setTimeout(checkSubscription, 0);
+          }
         } else {
           setSubscription({ subscribed: false, subscriptionEnd: null, productId: null, tier: null, minutesUsed: 0, minutesLimit: 0, loading: false });
         }
@@ -65,7 +70,10 @@ export function useAuth() {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-      if (session?.user) checkSubscription();
+      if (session?.user) {
+        initialCheckDone = true;
+        checkSubscription();
+      }
     });
 
     return () => authSub.unsubscribe();
