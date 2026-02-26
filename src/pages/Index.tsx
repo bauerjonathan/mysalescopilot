@@ -1,12 +1,39 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useRef } from "react";
+import { SessionPreparation } from "@/components/SessionPreparation";
+import { LiveSession } from "@/components/LiveSession";
+import { SessionSummary } from "@/components/SessionSummary";
+import { CustomerContext, SessionPhase, TranscriptEntry } from "@/types/session";
 
 const Index = () => {
+  const [phase, setPhase] = useState<SessionPhase>("preparation");
+  const [context, setContext] = useState<CustomerContext | null>(null);
+  const transcriptRef = useRef<TranscriptEntry[]>([]);
+
+  const handleStart = (ctx: CustomerContext) => {
+    setContext(ctx);
+    setPhase("live");
+  };
+
+  const handleStop = (entries: TranscriptEntry[]) => {
+    transcriptRef.current = entries;
+    setPhase("summary");
+  };
+
+  const handleNewSession = () => {
+    setContext(null);
+    transcriptRef.current = [];
+    setPhase("preparation");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {phase === "preparation" && <SessionPreparation onStart={handleStart} />}
+      {phase === "live" && context && (
+        <LiveSession context={context} onStop={handleStop} />
+      )}
+      {phase === "summary" && (
+        <SessionSummary entries={transcriptRef.current} onNewSession={handleNewSession} />
+      )}
     </div>
   );
 };
