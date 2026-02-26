@@ -34,7 +34,7 @@ export function SuggestionsPanel({ suggestions, isLoading }: Props) {
                 className={`rounded-lg border p-3 ${
                   s.type === "objection"
                     ? "border-destructive/30 bg-destructive/5"
-                    : "border-suggestion-border bg-suggestion-bg"
+                    : "border-primary/20 bg-primary/5"
                 }`}
               >
                 <div className="mb-1.5 flex items-center gap-1.5">
@@ -47,7 +47,7 @@ export function SuggestionsPanel({ suggestions, isLoading }: Props) {
                     {s.type === "objection" ? "Einwandbehandlung" : "Antwortvorschlag"}
                   </span>
                 </div>
-                <div className="prose prose-sm prose-invert max-w-none text-sm leading-relaxed text-foreground/90">
+                <div className="prose prose-sm max-w-none text-sm leading-relaxed text-foreground/90">
                   <ReactMarkdown>{s.text}</ReactMarkdown>
                 </div>
               </motion.div>
