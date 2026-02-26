@@ -1,4 +1,5 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -7,13 +8,52 @@ import { TIERS } from "@/config/tiers";
 import { Check, ArrowRight } from "lucide-react";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading, subscription, createCheckout, signOut } = useAuth();
+  const { user, loading, subscription, createCheckout, signOut, checkSubscription } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // After checkout success, poll for subscription until it's active
+  useEffect(() => {
+    if (searchParams.get("checkout") === "success" && !subscription.subscribed && !subscription.loading) {
+      // Start polling every 3 seconds
+      if (!pollingRef.current) {
+        pollingRef.current = setInterval(() => {
+          checkSubscription();
+        }, 3000);
+      }
+    }
+
+    if (subscription.subscribed && searchParams.get("checkout") === "success") {
+      // Clear polling and remove query param
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+      setSearchParams({}, { replace: true });
+    }
+
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    };
+  }, [searchParams, subscription.subscribed, subscription.loading, checkSubscription, setSearchParams]);
 
   if (loading || subscription.loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (searchParams.get("checkout") === "success" && !subscription.subscribed) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        <p className="text-sm text-muted-foreground">Zahlung wird überprüft…</p>
       </div>
     );
   }
