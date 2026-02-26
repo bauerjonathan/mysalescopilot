@@ -95,7 +95,7 @@ export default function Landing() {
             </span>
           </div>
           <Button
-            onClick={() => navigate("/app")}
+            onClick={() => navigate("/auth")}
             size="sm"
             className="gap-1.5"
           >
@@ -156,7 +156,7 @@ export default function Landing() {
           >
             <Button
               size="lg"
-              onClick={() => navigate("/app")}
+              onClick={() => navigate("/auth")}
               className="gap-2 px-8 text-base"
             >
               <Play className="h-4 w-4" />
@@ -364,7 +364,7 @@ export default function Landing() {
                 <Button
                   size="lg"
                   className="w-full gap-2 text-base"
-                  onClick={() => navigate("/app")}
+                  onClick={() => navigate("/auth")}
                 >
                   Jetzt starten
                   <ArrowRight className="h-4 w-4" />
@@ -390,7 +390,7 @@ export default function Landing() {
           </p>
           <Button
             size="lg"
-            onClick={() => navigate("/app")}
+            onClick={() => navigate("/auth")}
             className="gap-2 px-10 text-base"
           >
             <Play className="h-4 w-4" />
