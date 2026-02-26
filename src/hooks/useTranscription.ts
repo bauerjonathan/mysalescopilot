@@ -8,7 +8,17 @@ export function useTranscription() {
   const [partialText, setPartialText] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [currentSpeaker, setCurrentSpeaker] = useState<"user" | "customer">("customer");
   const entryCounter = useRef(0);
+  const speakerRef = useRef<"user" | "customer">("customer");
+
+  const toggleSpeaker = useCallback(() => {
+    setCurrentSpeaker((prev) => {
+      const next = prev === "customer" ? "user" : "customer";
+      speakerRef.current = next;
+      return next;
+    });
+  }, []);
 
   const scribe = useScribe({
     modelId: "scribe_v2_realtime",
@@ -23,7 +33,7 @@ export function useTranscription() {
         setPartialText("");
         const newEntry: TranscriptEntry = {
           id: `t-${Date.now()}-${entryCounter.current++}`,
-          speaker: "customer", // Default - in real app would use diarization
+          speaker: speakerRef.current,
           text: data.text.trim(),
           timestamp: Date.now(),
         };
@@ -67,9 +77,11 @@ export function useTranscription() {
     partialText,
     isConnected,
     isPaused,
+    currentSpeaker,
     start,
     stop,
     pause,
     resume,
+    toggleSpeaker,
   };
 }

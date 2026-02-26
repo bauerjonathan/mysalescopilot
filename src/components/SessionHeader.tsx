@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Square, User, Building } from "lucide-react";
+import { Mic, MicOff, Square, User, Building, ArrowLeftRight } from "lucide-react";
 import { CustomerContext } from "@/types/session";
 
 interface Props {
   context: CustomerContext;
   isRecording: boolean;
   isPaused: boolean;
+  currentSpeaker: "user" | "customer";
   onPause: () => void;
   onResume: () => void;
   onStop: () => void;
+  onToggleSpeaker: () => void;
 }
 
-export function SessionHeader({ context, isRecording, isPaused, onPause, onResume, onStop }: Props) {
+export function SessionHeader({ context, isRecording, isPaused, currentSpeaker, onPause, onResume, onStop, onToggleSpeaker }: Props) {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -43,6 +45,19 @@ export function SessionHeader({ context, isRecording, isPaused, onPause, onResum
             {formatTime(elapsed)}
           </span>
         </div>
+
+        <div className="h-4 w-px bg-border" />
+
+        {/* Speaker toggle */}
+        <Button
+          variant={currentSpeaker === "user" ? "default" : "secondary"}
+          size="sm"
+          onClick={onToggleSpeaker}
+          className="gap-1.5 min-w-[140px]"
+        >
+          <ArrowLeftRight className="h-3.5 w-3.5" />
+          {currentSpeaker === "user" ? "Ich spreche" : "Kunde spricht"}
+        </Button>
 
         <div className="h-4 w-px bg-border" />
 

@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function LiveSession({ context, onStop }: Props) {
-  const { entries, partialText, isConnected, isPaused, start, stop, pause, resume } =
+  const { entries, partialText, isConnected, isPaused, currentSpeaker, start, stop, pause, resume, toggleSpeaker } =
     useTranscription();
   const { suggestions, isLoading, generateSuggestion } = useSuggestions(context);
   const { toast } = useToast();
@@ -48,9 +48,11 @@ export function LiveSession({ context, onStop }: Props) {
         context={context}
         isRecording={isConnected}
         isPaused={isPaused}
+        currentSpeaker={currentSpeaker}
         onPause={pause}
         onResume={resume}
         onStop={handleStop}
+        onToggleSpeaker={toggleSpeaker}
       />
       <div className="grid flex-1 grid-cols-2 divide-x divide-border overflow-hidden">
         <TranscriptPanel entries={entries} partialText={partialText} />
