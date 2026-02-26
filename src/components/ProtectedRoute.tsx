@@ -27,13 +27,19 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
             </div>
             <CardTitle>Abo erforderlich</CardTitle>
             <CardDescription>
-              Um SalesCopilot zu nutzen, benötigst du ein aktives Abonnement für 25€/Monat.
+              Um SalesCopilot zu nutzen, benötigst du ein aktives Abonnement.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
+            <div className="rounded-lg border border-primary/20 bg-primary/5 p-4 mb-1">
+              <p className="text-sm font-medium text-foreground mb-1">🎉 14 Tage kostenlos testen</p>
+              <p className="text-xs text-muted-foreground">
+                Starte jetzt deine Testphase – du zahlst erst nach 14 Tagen. Jederzeit vorher kündbar, komplett risikofrei.
+              </p>
+            </div>
             <Button onClick={createCheckout} className="w-full gap-2">
               <CreditCard className="h-4 w-4" />
-              Jetzt für 25€/Monat abonnieren
+              Kostenlos testen – danach 25€/Monat
             </Button>
             <Button variant="ghost" onClick={signOut} className="w-full gap-2">
               <LogOut className="h-4 w-4" />
