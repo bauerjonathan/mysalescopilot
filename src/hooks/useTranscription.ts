@@ -13,6 +13,8 @@ export function useTranscription() {
   const micStreamRef = useRef<MediaStream | null>(null);
   const displayStreamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const processorRef = useRef<ScriptProcessorNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const isPausedRef = useRef(false);
 
   const start = useCallback(async () => {
@@ -137,6 +139,8 @@ export function useTranscription() {
         socket.send(int16.buffer);
       };
 
+      processorRef.current = processor;
+
       setIsConnected(true);
     } catch (err) {
       console.error("Transcription start failed:", err);
@@ -145,19 +149,35 @@ export function useTranscription() {
   }, []);
 
   const stop = useCallback(() => {
-    if (socketRef.current?.readyState === WebSocket.OPEN) {
-      socketRef.current.send(JSON.stringify({ type: "stop_recording" }));
-      socketRef.current.close();
-    }
+    // 1. Disconnect audio processing first
+    try {
+      processorRef.current?.disconnect();
+      processorRef.current = null;
+    } catch { /* ignore */ }
+
+    // 2. Close WebSocket (handle any readyState)
+    try {
+      const ws = socketRef.current;
+      if (ws) {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: "stop_recording" }));
+        }
+        ws.close();
+      }
+    } catch { /* ignore */ }
     socketRef.current = null;
 
+    // 3. Stop all media tracks
     micStreamRef.current?.getTracks().forEach((t) => t.stop());
     micStreamRef.current = null;
 
     displayStreamRef.current?.getTracks().forEach((t) => t.stop());
     displayStreamRef.current = null;
 
-    audioContextRef.current?.close();
+    // 4. Close audio context
+    try {
+      audioContextRef.current?.close();
+    } catch { /* ignore */ }
     audioContextRef.current = null;
 
     setIsConnected(false);
