@@ -415,6 +415,14 @@ export default function Landing() {
             <Headphones className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium">SalesCopilot</span>
           </div>
+          <div className="flex items-center gap-4">
+            <button onClick={() => navigate("/impressum")} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Impressum
+            </button>
+            <button onClick={() => navigate("/kontakt")} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Kontakt
+            </button>
+          </div>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} SalesCopilot. Alle Rechte vorbehalten.
           </p>
