@@ -71,7 +71,19 @@ serve(async (req) => {
       });
     }
 
-    const subscriptionEnd = new Date(sub.current_period_end * 1000).toISOString();
+    let subscriptionEnd = null;
+    try {
+      const endTs = sub.current_period_end;
+      if (endTs && typeof endTs === "number") {
+        const d = new Date(endTs * 1000);
+        if (!isNaN(d.getTime())) {
+          subscriptionEnd = d.toISOString();
+        }
+      }
+    } catch {
+      // ignore date errors
+    }
+
     const productId = sub.items.data[0]?.price?.product as string;
 
     // Get usage for current month
