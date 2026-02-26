@@ -419,6 +419,9 @@ export default function Landing() {
             <button onClick={() => navigate("/impressum")} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Impressum
             </button>
+            <button onClick={() => navigate("/datenschutz")} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Datenschutz
+            </button>
             <button onClick={() => navigate("/kontakt")} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               Kontakt
             </button>
