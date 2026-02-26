@@ -80,7 +80,7 @@ serve(async (req) => {
         encoding: "wav/pcm",
         sample_rate: 16000,
         bit_depth: 16,
-        channels: 1,
+        channels: 2,
         model: "solaria-1",
         language_config: {
           languages: ["de"],

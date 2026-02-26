@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function LiveSession({ context, onStop }: Props) {
-  const { entries, partialText, isConnected, isPaused, currentSpeaker, start, stop, pause, resume, toggleSpeaker } =
+  const { entries, partialText, isConnected, isPaused, systemAudioActive, start, stop, pause, resume } =
     useTranscription();
   const { suggestions, isLoading, generateSuggestion } = useSuggestions(context);
   const { toast } = useToast();
@@ -42,12 +42,10 @@ export function LiveSession({ context, onStop }: Props) {
 
   const trackUsage = useCallback(async () => {
     const elapsedMs = Date.now() - sessionStartTime.current;
-    const minutes = Math.round((elapsedMs / 60000) * 100) / 100; // round to 2 decimals
+    const minutes = Math.round((elapsedMs / 60000) * 100) / 100;
     if (minutes > 0) {
       try {
-        await supabase.functions.invoke("track-usage", {
-          body: { minutes },
-        });
+        await supabase.functions.invoke("track-usage", { body: { minutes } });
       } catch (err) {
         console.error("Usage tracking failed:", err);
       }
@@ -66,11 +64,10 @@ export function LiveSession({ context, onStop }: Props) {
         context={context}
         isRecording={isConnected}
         isPaused={isPaused}
-        currentSpeaker={currentSpeaker}
+        systemAudioActive={systemAudioActive}
         onPause={pause}
         onResume={resume}
         onStop={handleStop}
-        onToggleSpeaker={toggleSpeaker}
       />
       <div className="grid flex-1 grid-cols-2 divide-x divide-border overflow-hidden">
         <TranscriptPanel entries={entries} partialText={partialText} />

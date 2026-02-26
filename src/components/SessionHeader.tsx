@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Square, User, Building, ArrowLeftRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Mic, MicOff, Square, User, Building, Monitor } from "lucide-react";
 import { CustomerContext } from "@/types/session";
 
 interface Props {
   context: CustomerContext;
   isRecording: boolean;
   isPaused: boolean;
-  currentSpeaker: "user" | "customer";
+  systemAudioActive: boolean;
   onPause: () => void;
   onResume: () => void;
   onStop: () => void;
-  onToggleSpeaker: () => void;
 }
 
-export function SessionHeader({ context, isRecording, isPaused, currentSpeaker, onPause, onResume, onStop, onToggleSpeaker }: Props) {
+export function SessionHeader({ context, isRecording, isPaused, systemAudioActive, onPause, onResume, onStop }: Props) {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -48,16 +48,20 @@ export function SessionHeader({ context, isRecording, isPaused, currentSpeaker, 
 
         <div className="h-4 w-px bg-border" />
 
-        {/* Speaker toggle */}
-        <Button
-          variant={currentSpeaker === "user" ? "default" : "secondary"}
-          size="sm"
-          onClick={onToggleSpeaker}
-          className="gap-1.5 min-w-[140px]"
-        >
-          <ArrowLeftRight className="h-3.5 w-3.5" />
-          {currentSpeaker === "user" ? "Ich spreche" : "Kunde spricht"}
-        </Button>
+        {/* Audio source indicator */}
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="gap-1.5 text-xs">
+            <Mic className="h-3 w-3 text-primary" />
+            Mikrofon
+          </Badge>
+          <Badge
+            variant={systemAudioActive ? "outline" : "secondary"}
+            className="gap-1.5 text-xs"
+          >
+            <Monitor className="h-3 w-3" />
+            {systemAudioActive ? "System-Audio aktiv" : "Kein System-Audio"}
+          </Badge>
+        </div>
 
         <div className="h-4 w-px bg-border" />
 
