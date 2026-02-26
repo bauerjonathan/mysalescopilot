@@ -223,15 +223,7 @@ export default function Landing() {
                         Das klingt gut, aber ehrlich gesagt haben wir gerade andere Prioritäten und kein Budget dafür eingeplant.
                       </span>
                     </p>
-                    <p className="text-sm">
-                      <span className="text-[hsl(var(--transcript-user))] font-medium text-foreground/40">
-                        Du:
-                      </span>{" "}
-                      <span className="text-foreground/40 italic">
-                        tippt…
-                      </span>
-                    </p>
-                  </div>
+                   </div>
                 </div>
                 <div className="p-4 space-y-3">
                   <p className="text-xs text-muted-foreground font-mono mb-2">
@@ -245,8 +237,8 @@ export default function Landing() {
                       „Verstehe ich – genau deshalb lohnt sich ein Blick: Unsere Kunden sparen im Schnitt <strong>12 Stunden pro Monat</strong>. Darf ich Ihnen kurz zeigen, wie sich das bei Ihnen rechnet?"
                     </p>
                   </div>
-                  <div className="rounded-lg border border-[hsl(var(--suggestion-border))] bg-[hsl(var(--suggestion-bg))] p-3">
-                    <p className="text-xs font-semibold text-primary mb-1">
+                  <div className="rounded-lg border border-green-600/40 bg-green-950/20 p-3">
+                    <p className="text-xs font-semibold text-green-500 mb-1">
                       💡 Alternativ
                     </p>
                     <p className="text-sm text-foreground/80">
