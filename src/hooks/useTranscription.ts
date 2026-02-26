@@ -17,10 +17,10 @@ export function useTranscription() {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const isPausedRef = useRef(false);
 
-  const start = useCallback(async () => {
+  const start = useCallback(async (language: string = "de") => {
     try {
       // 1. Get Gladia session from edge function
-      const { data, error } = await supabase.functions.invoke("gladia-session-init");
+      const { data, error } = await supabase.functions.invoke("gladia-session-init", { body: { language } });
       if (error || !data?.websocket_url) {
         const msg = data?.error || error?.message || "Keine Session erhalten";
         throw new Error(msg);

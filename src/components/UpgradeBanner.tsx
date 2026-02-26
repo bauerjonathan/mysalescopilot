@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { TIERS } from "@/config/tiers";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { ArrowRight, Zap } from "lucide-react";
 
 export function UpgradeBanner() {
   const { createCheckout } = useAuth();
+  const { t } = useTranslation();
   const unlimited = TIERS.unlimited;
 
   return (
@@ -15,9 +17,9 @@ export function UpgradeBanner() {
             <Zap className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <p className="text-sm font-semibold">Deine kostenlosen Test-Minuten sind aufgebraucht</p>
+            <p className="text-sm font-semibold">{t("upgrade.freeMinutesUsed")}</p>
             <p className="text-xs text-muted-foreground">
-              Upgrade auf Unlimited für unbegrenzte Gespräche – nur {unlimited.price}€/Monat
+              {t("upgrade.upgradeDesc", { price: unlimited.price })}
             </p>
           </div>
         </div>
@@ -26,7 +28,7 @@ export function UpgradeBanner() {
           className="gap-1.5 shrink-0"
           onClick={() => createCheckout(unlimited.price_id)}
         >
-          Jetzt upgraden <ArrowRight className="h-3.5 w-3.5" />
+          {t("upgrade.upgradeNow")} <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       </div>
     </div>

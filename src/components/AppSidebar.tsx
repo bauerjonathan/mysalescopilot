@@ -1,6 +1,7 @@
 import { Headphones, Building2, Mic } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Sidebar,
   SidebarContent,
@@ -13,13 +14,14 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
-const navItems = [
-  { title: "Neues Gespräch", url: "/app", icon: Mic },
-  { title: "Meine Firma", url: "/app/firma", icon: Building2 },
-];
-
 export function AppSidebar() {
   const location = useLocation();
+  const { t } = useTranslation();
+
+  const navItems = [
+    { title: t("nav.newSession"), url: "/app", icon: Mic },
+    { title: t("nav.myCompany"), url: "/app/firma", icon: Building2 },
+  ];
 
   return (
     <Sidebar>
@@ -36,7 +38,7 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-sidebar-foreground/60">NAVIGATION</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/60">{t("nav.navigation")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navItems.map((item) => (

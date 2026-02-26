@@ -70,6 +70,15 @@ serve(async (req) => {
       throw new Error("Minutenlimit erreicht. Bitte upgraden Sie Ihren Plan.");
     }
 
+    // Parse request body for language
+    let language = "de";
+    try {
+      const body = await req.json();
+      if (body?.language && ["de", "en"].includes(body.language)) {
+        language = body.language;
+      }
+    } catch { /* default to de */ }
+
     // Init Gladia live session
     const response = await fetch("https://api.gladia.io/v2/live", {
       method: "POST",
@@ -84,7 +93,7 @@ serve(async (req) => {
         channels: 2,
         model: "solaria-1",
         language_config: {
-          languages: ["de"],
+          languages: [language],
           code_switching: false,
         },
         messages_config: {

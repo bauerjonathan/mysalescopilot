@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -14,31 +15,25 @@ interface Props {
 export function SessionSummary({ entries, onNewSession }: Props) {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const fullText = entries
-    .map((e) => `[${e.speaker === "user" ? "Du" : "Kunde"}] ${e.text}`)
+    .map((e) => `[${e.speaker === "user" ? t("live.you") : t("live.customer")}] ${e.text}`)
     .join("\n\n");
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(fullText);
     setCopied(true);
-    toast({ title: "Transkript kopiert!" });
+    toast({ title: t("summary.transcriptCopied") });
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = () => {
     const now = new Date();
-    const dateStr = now.toLocaleDateString("de-DE", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-    const timeStr = now.toLocaleTimeString("de-DE", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const dateStr = now.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const timeStr = now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
 
-    const header = `SalesCopilot – Gesprächstranskript\nDatum: ${dateStr}, ${timeStr}\n${"─".repeat(40)}\n\n`;
+    const header = `${t("summary.transcriptHeader")}\nDatum: ${dateStr}, ${timeStr}\n${"─".repeat(40)}\n\n`;
     const content = header + fullText;
 
     const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
@@ -48,26 +43,26 @@ export function SessionSummary({ entries, onNewSession }: Props) {
     a.download = `transkript-${now.toISOString().slice(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
-    toast({ title: "Transkript heruntergeladen!" });
+    toast({ title: t("summary.transcriptDownloaded") });
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-3xl border-border bg-card">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg text-foreground">Gesprächszusammenfassung</CardTitle>
+          <CardTitle className="text-lg text-foreground">{t("summary.title")}</CardTitle>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={handleDownload} className="gap-1.5">
               <Download className="h-3.5 w-3.5" />
-              Exportieren
+              {t("summary.export")}
             </Button>
             <Button variant="outline" size="sm" onClick={handleCopy} className="gap-1.5">
               {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-              {copied ? "Kopiert" : "Kopieren"}
+              {copied ? t("summary.copied") : t("summary.copy")}
             </Button>
             <Button size="sm" onClick={onNewSession} className="gap-1.5">
               <RotateCcw className="h-3.5 w-3.5" />
-              Neue Session
+              {t("summary.newSession")}
             </Button>
           </div>
         </CardHeader>
@@ -89,7 +84,7 @@ export function SessionSummary({ entries, onNewSession }: Props) {
                           : "text-transcript-customer"
                       }`}
                     >
-                      {entry.speaker === "user" ? "Du" : "Kunde"}
+                      {entry.speaker === "user" ? t("live.you") : t("live.customer")}
                     </span>
                     <p className="text-sm leading-relaxed text-foreground/90">{entry.text}</p>
                   </div>
