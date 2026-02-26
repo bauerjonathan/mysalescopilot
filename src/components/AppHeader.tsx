@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function AppHeader() {
-  const { user, subscription, signOut, openCustomerPortal } = useAuth();
+  const { user, subscription, signOut, openCustomerPortal, createCheckout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -76,15 +76,15 @@ export function AppHeader() {
                 </p>
               </div>
               <DropdownMenuSeparator />
-              {subscription.subscribed ? (
+              {subscription.tier === "unlimited" ? (
                 <DropdownMenuItem onClick={openCustomerPortal} className="gap-2 cursor-pointer">
                   <Settings className="h-4 w-4" />
                   Abo verwalten
                 </DropdownMenuItem>
               ) : (
-                <DropdownMenuItem onClick={() => navigate("/app")} className="gap-2 cursor-pointer">
+                <DropdownMenuItem onClick={() => createCheckout(TIERS.unlimited.price_id)} className="gap-2 cursor-pointer">
                   <CreditCard className="h-4 w-4" />
-                  Abo abschließen
+                  Auf Unlimited upgraden
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
