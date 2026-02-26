@@ -96,7 +96,7 @@ export function useAuth() {
       body: { priceId },
     });
     if (error) throw error;
-    if (data?.url) window.open(data.url, "_blank");
+    if (data?.url) window.location.href = data.url;
   };
 
   const openCustomerPortal = async () => {
