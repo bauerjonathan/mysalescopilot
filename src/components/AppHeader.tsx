@@ -2,12 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import { TIERS } from "@/config/tiers";
 import {
   Headphones,
   LogOut,
   CreditCard,
   Settings,
   Crown,
+  Clock,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -44,14 +46,23 @@ export function AppHeader() {
 
         {/* Right side */}
         <div className="flex items-center gap-3">
-          {subscription.subscribed && (
-            <Badge
-              variant="secondary"
-              className="hidden sm:flex gap-1.5 px-3 py-1 text-xs"
-            >
-              <Crown className="h-3 w-3 text-primary" />
-              Pro aktiv
-            </Badge>
+          {subscription.subscribed && subscription.tier && (
+            <>
+              <Badge
+                variant="secondary"
+                className="hidden sm:flex gap-1.5 px-3 py-1 text-xs"
+              >
+                <Crown className="h-3 w-3 text-primary" />
+                {TIERS[subscription.tier].name}
+              </Badge>
+              <Badge
+                variant="outline"
+                className="hidden sm:flex gap-1.5 px-3 py-1 text-xs"
+              >
+                <Clock className="h-3 w-3" />
+                {Math.round(subscription.minutesUsed)} / {subscription.minutesLimit >= 999999 ? "∞" : subscription.minutesLimit} Min
+              </Badge>
+            </>
           )}
 
           <DropdownMenu>
@@ -69,7 +80,9 @@ export function AppHeader() {
               <div className="px-3 py-2">
                 <p className="text-sm font-medium truncate">{user?.email}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {subscription.subscribed ? "Pro-Abo aktiv" : "Kein Abo"}
+                  {subscription.subscribed && subscription.tier
+                    ? `${TIERS[subscription.tier].name}-Abo aktiv`
+                    : "Kein Abo"}
                 </p>
               </div>
               <DropdownMenuSeparator />

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { TIERS } from "@/config/tiers";
 import {
   Mic,
   Brain,
@@ -68,16 +69,7 @@ const features = [
   },
 ];
 
-const pricingFeatures = [
-  "Unbegrenzte Gespräche",
-  "Echtzeit-Transkription",
-  "KI-Antwortvorschläge",
-  "Einwandbehandlung",
-  "Kundenkontext-Eingabe",
-  "Gesprächs-Zusammenfassungen",
-  "Alle zukünftigen Updates",
-  "Prioritäts-Support",
-];
+const tierEntries = Object.entries(TIERS) as [string, typeof TIERS[keyof typeof TIERS]][];
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -183,7 +175,7 @@ export default function Landing() {
               className="gap-2 px-8 text-base"
             >
               <Play className="h-4 w-4" />
-              Kostenlos testen
+              Jetzt starten
             </Button>
             <Button
               size="lg"
@@ -355,58 +347,66 @@ export default function Landing() {
 
       {/* Pricing */}
       <section id="pricing" className="py-24 px-6 border-t border-border/50">
-        <div className="mx-auto max-w-lg text-center">
+        <div className="mx-auto max-w-5xl text-center">
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
-            Starte kostenlos. Überzeuge dich selbst.
+            Wähle deinen Plan
           </h2>
           <p className="text-muted-foreground text-lg mb-12">
-            14 Tage lang alles testen – danach entscheidest du.
+            Flexibel skalieren – von Einzelkämpfer bis Enterprise.
           </p>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <Card className="border-primary/30 bg-card relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
-              <CardContent className="p-8">
-                <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">14 Tage kostenlos</Badge>
-                <div className="flex items-baseline justify-center gap-1 mb-1">
-                  <span className="text-lg text-muted-foreground line-through mr-2">25€</span>
-                  <span className="text-5xl font-bold">0€</span>
-                </div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  für die ersten 14 Tage
-                </p>
-                <p className="text-xs text-muted-foreground mb-8">
-                  Danach 25€/Monat · jederzeit kündbar · keine Bindung
-                </p>
-
-                <ul className="space-y-3 text-left mb-8">
-                  {pricingFeatures.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-sm">
-                      <Check className="h-4 w-4 text-primary shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  size="lg"
-                  className="w-full gap-2 text-base"
-                  onClick={() => navigate("/auth")}
-                >
-                  14 Tage kostenlos testen
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-                <p className="mt-3 text-xs text-muted-foreground">
-                  Keine Kosten während der Testphase. Jederzeit kündbar.
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {tierEntries.map(([key, tier]) => (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className={`h-full relative overflow-hidden ${key === "pro" ? "border-primary/50 shadow-lg shadow-primary/10" : "border-border/50"}`}>
+                  {key === "pro" && (
+                    <>
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
+                      <Badge className="absolute top-4 right-4 bg-primary/10 text-primary border-primary/20">Beliebt</Badge>
+                    </>
+                  )}
+                  <CardHeader className="text-left">
+                    <CardTitle className="text-lg">{tier.name}</CardTitle>
+                    <CardDescription>
+                      {tier.minutes_limit === Infinity ? "Unbegrenzte" : `${tier.minutes_limit}`} Minuten/Monat
+                    </CardDescription>
+                    <div className="flex items-baseline gap-1 mt-2">
+                      <span className="text-4xl font-bold">{tier.price}€</span>
+                      <span className="text-sm text-muted-foreground">/Monat</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="text-left space-y-4">
+                    <ul className="space-y-2">
+                      {tier.features.map((f) => (
+                        <li key={f} className="flex items-center gap-2 text-sm">
+                          <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      size="lg"
+                      className="w-full gap-2 text-base"
+                      variant={key === "pro" ? "default" : "outline"}
+                      onClick={() => navigate("/auth")}
+                    >
+                      Jetzt starten
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+          <p className="mt-6 text-xs text-muted-foreground">
+            Alle Preise inkl. MwSt. · Jederzeit kündbar · Keine Bindung
+          </p>
         </div>
       </section>
 
@@ -426,7 +426,7 @@ export default function Landing() {
             className="gap-2 px-10 text-base"
           >
             <Play className="h-4 w-4" />
-            Kostenlos testen
+            Jetzt starten
           </Button>
         </div>
       </section>

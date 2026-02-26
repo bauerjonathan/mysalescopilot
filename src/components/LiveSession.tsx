@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { SessionHeader } from "./SessionHeader";
 import { TranscriptPanel } from "./TranscriptPanel";
 import { SuggestionsPanel } from "./SuggestionsPanel";
@@ -6,6 +6,7 @@ import { useTranscription } from "@/hooks/useTranscription";
 import { useSuggestions } from "@/hooks/useSuggestions";
 import { CustomerContext, TranscriptEntry } from "@/types/session";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Props {
   context: CustomerContext;
@@ -18,12 +19,14 @@ export function LiveSession({ context, onStop }: Props) {
   const { suggestions, isLoading, generateSuggestion } = useSuggestions(context);
   const { toast } = useToast();
   const prevEntriesLength = useRef(0);
+  const sessionStartTime = useRef<number>(Date.now());
 
   useEffect(() => {
+    sessionStartTime.current = Date.now();
     start().catch((err) => {
       toast({
         variant: "destructive",
-        title: "Mikrofon-Fehler",
+        title: "Fehler",
         description: err.message || "Mikrofon konnte nicht aktiviert werden.",
       });
     });
@@ -37,8 +40,23 @@ export function LiveSession({ context, onStop }: Props) {
     }
   }, [entries, generateSuggestion]);
 
-  const handleStop = () => {
+  const trackUsage = useCallback(async () => {
+    const elapsedMs = Date.now() - sessionStartTime.current;
+    const minutes = Math.round((elapsedMs / 60000) * 100) / 100; // round to 2 decimals
+    if (minutes > 0) {
+      try {
+        await supabase.functions.invoke("track-usage", {
+          body: { minutes },
+        });
+      } catch (err) {
+        console.error("Usage tracking failed:", err);
+      }
+    }
+  }, []);
+
+  const handleStop = async () => {
     stop();
+    await trackUsage();
     onStop(entries);
   };
 
