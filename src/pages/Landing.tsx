@@ -347,15 +347,15 @@ export default function Landing() {
 
       {/* Pricing */}
       <section id="pricing" className="py-24 px-6 border-t border-border/50">
-        <div className="mx-auto max-w-5xl text-center">
+        <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
-            Wähle deinen Plan
+            Einfach loslegen
           </h2>
           <p className="text-muted-foreground text-lg mb-12">
-            Flexibel skalieren – von Einzelkämpfer bis Enterprise.
+            Teste kostenlos – upgrade wenn du überzeugt bist.
           </p>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
             {tierEntries.map(([key, tier]) => (
               <motion.div
                 key={key}
@@ -364,8 +364,8 @@ export default function Landing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <Card className={`h-full relative overflow-hidden ${key === "pro" ? "border-primary/50 shadow-lg shadow-primary/10" : "border-border/50"}`}>
-                  {key === "pro" && (
+                <Card className={`h-full relative overflow-hidden ${key === "unlimited" ? "border-primary/50 shadow-lg shadow-primary/10" : "border-border/50"}`}>
+                  {key === "unlimited" && (
                     <>
                       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
                       <span className="absolute top-4 right-4 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">Beliebt</span>
@@ -374,11 +374,11 @@ export default function Landing() {
                   <CardHeader className="text-left">
                     <CardTitle className="text-lg">{tier.name}</CardTitle>
                     <CardDescription>
-                      {tier.minutes_limit === Infinity ? "Unbegrenzte" : `${tier.minutes_limit}`} Minuten/Monat
+                      {key === "free" ? "Teste unsere Kernfunktionen" : "Meistere jedes Gespräch"}
                     </CardDescription>
                     <div className="flex items-baseline gap-1 mt-2">
-                      <span className="text-4xl font-bold">{tier.price}€</span>
-                      <span className="text-sm text-muted-foreground">/Monat</span>
+                      <span className="text-4xl font-bold">{tier.price === 0 ? "Kostenlos" : `${tier.price}€`}</span>
+                      {tier.price > 0 && <span className="text-sm text-muted-foreground">/Monat</span>}
                     </div>
                   </CardHeader>
                   <CardContent className="text-left space-y-4">
@@ -393,10 +393,10 @@ export default function Landing() {
                     <Button
                       size="lg"
                       className="w-full gap-2 text-base"
-                      variant={key === "pro" ? "default" : "outline"}
+                      variant={key === "unlimited" ? "default" : "outline"}
                       onClick={() => navigate("/auth")}
                     >
-                      Jetzt starten
+                      {key === "free" ? "Jetzt testen" : "Jetzt starten"}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </CardContent>
@@ -405,7 +405,7 @@ export default function Landing() {
             ))}
           </div>
           <p className="mt-6 text-xs text-muted-foreground">
-            Alle Preise inkl. MwSt. · Jederzeit kündbar · Keine Bindung
+            Keine Kreditkarte nötig · Jederzeit kündbar · Keine Bindung
           </p>
         </div>
       </section>

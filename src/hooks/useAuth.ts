@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getTierByProductId, TIERS, TierKey } from "@/config/tiers";
+import { FREE_MINUTES_LIMIT, TIERS, TierKey } from "@/config/tiers";
 import type { User, Session } from "@supabase/supabase-js";
 
 interface SubscriptionState {
@@ -31,15 +31,17 @@ export function useAuth() {
     try {
       const { data, error } = await supabase.functions.invoke("check-subscription");
       if (error) throw error;
-      const tier = data.product_id ? getTierByProductId(data.product_id) : null;
-      const minutesLimit = tier ? TIERS[tier].minutes_limit : 0;
+
+      const tier: TierKey = data.tier === "unlimited" ? "unlimited" : "free";
+      const minutesLimit = tier === "unlimited" ? 999999 : FREE_MINUTES_LIMIT;
+
       setSubscription({
-        subscribed: data.subscribed ?? false,
+        subscribed: data.subscribed ?? true,
         subscriptionEnd: data.subscription_end ?? null,
         productId: data.product_id ?? null,
         tier,
         minutesUsed: data.minutes_used ?? 0,
-        minutesLimit: minutesLimit === Infinity ? 999999 : minutesLimit,
+        minutesLimit,
         loading: false,
       });
     } catch {
@@ -57,7 +59,6 @@ export function useAuth() {
         setLoading(false);
         if (session?.user) {
           if (initialCheckDone) {
-            // Only trigger on subsequent auth changes, not the initial one
             setTimeout(checkSubscription, 0);
           }
         } else {
