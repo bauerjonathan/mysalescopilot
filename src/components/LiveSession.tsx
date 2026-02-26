@@ -43,7 +43,7 @@ export function LiveSession({ context, onStop }: Props) {
   };
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-full flex-col">
       <SessionHeader
         context={context}
         isRecording={isConnected}
