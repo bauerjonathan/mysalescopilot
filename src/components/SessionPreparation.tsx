@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mic, Phone, Briefcase, RotateCcw } from "lucide-react";
+import { Mic, Phone, Briefcase, RotateCcw, AlertTriangle, ArrowUpCircle } from "lucide-react";
 import { CustomerContext, CallType } from "@/types/session";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
+import { TIERS, TierKey } from "@/config/tiers";
 
 const TEMPLATES: Record<CallType, Partial<CustomerContext>> = {
   "cold-call": {
@@ -32,6 +35,20 @@ interface Props {
 }
 
 export function SessionPreparation({ onStart }: Props) {
+  const { subscription, openCustomerPortal } = useAuth();
+  const navigate = useNavigate();
+
+  const isLimitReached =
+    subscription.subscribed &&
+    subscription.minutesLimit < 999999 &&
+    subscription.minutesUsed >= subscription.minutesLimit;
+
+  // Determine next tier for upgrade CTA
+  const tierKeys: TierKey[] = ["basic", "pro", "enterprise"];
+  const currentTierIndex = subscription.tier ? tierKeys.indexOf(subscription.tier) : -1;
+  const nextTier = currentTierIndex >= 0 && currentTierIndex < tierKeys.length - 1
+    ? TIERS[tierKeys[currentTierIndex + 1]]
+    : null;
   const [context, setContext] = useState<CustomerContext>({
     name: "",
     company: "",
@@ -76,6 +93,44 @@ export function SessionPreparation({ onStart }: Props) {
           </div>
         </CardHeader>
         <CardContent className="space-y-5">
+          {/* Limit reached banner */}
+          {isLimitReached && (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 space-y-3">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-foreground">
+                    Minutenlimit erreicht
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Du hast alle {subscription.minutesLimit} Minuten in diesem Monat verbraucht.
+                    {nextTier
+                      ? ` Upgrade auf ${nextTier.name} für ${nextTier.minutes_limit === Infinity ? "unbegrenzte" : nextTier.minutes_limit} Minuten.`
+                      : " Dein Kontingent wird am Monatsanfang zurückgesetzt."}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                {nextTier && (
+                  <Button
+                    size="sm"
+                    className="gap-1.5"
+                    onClick={openCustomerPortal}
+                  >
+                    <ArrowUpCircle className="h-3.5 w-3.5" />
+                    Upgrade auf {nextTier.name}
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={openCustomerPortal}
+                >
+                  Abo verwalten
+                </Button>
+              </div>
+            </div>
+          )}
           {/* Call Type */}
           <div className="space-y-2">
             <Label className="text-muted-foreground">Gesprächstyp</Label>
@@ -162,9 +217,10 @@ export function SessionPreparation({ onStart }: Props) {
             onClick={() => onStart(context)}
             className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
             size="lg"
+            disabled={isLimitReached}
           >
             <Mic className="h-4 w-4" />
-            Gespräch starten
+            {isLimitReached ? "Minutenlimit erreicht" : "Gespräch starten"}
           </Button>
         </CardContent>
       </Card>
