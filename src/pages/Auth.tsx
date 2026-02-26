@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Headphones, Loader2 } from "lucide-react";
+import { Headphones, Loader2, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Auth() {
   const { user, loading, signUp, signIn } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -45,7 +46,16 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => navigate("/")}
+        className="absolute top-4 left-4 gap-1.5 text-muted-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Zurück
+      </Button>
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20">

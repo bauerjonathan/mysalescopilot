@@ -94,13 +94,22 @@ export default function Landing() {
               Sales<span className="text-primary">Copilot</span>
             </span>
           </div>
-          <Button
-            onClick={() => navigate("/auth")}
-            size="sm"
-            className="gap-1.5"
-          >
-            Jetzt starten <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/auth")}
+            >
+              Anmelden
+            </Button>
+            <Button
+              onClick={() => navigate("/auth")}
+              size="sm"
+              className="gap-1.5"
+            >
+              Jetzt starten <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </div>
       </nav>
 
