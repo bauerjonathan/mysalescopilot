@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { motion } from "framer-motion";
 import { TIERS } from "@/config/tiers";
 import {
@@ -20,6 +21,9 @@ import {
   TrendingUp,
   Target,
   Globe,
+  FileText,
+  Star,
+  Quote,
 } from "lucide-react";
 
 const fadeUp = {
@@ -58,6 +62,20 @@ export default function Landing() {
     { step: "01", title: t("landing.step1Title"), desc: t("landing.step1Desc") },
     { step: "02", title: t("landing.step2Title"), desc: t("landing.step2Desc") },
     { step: "03", title: t("landing.step3Title"), desc: t("landing.step3Desc") },
+    { step: "04", title: t("landing.step4Title"), desc: t("landing.step4Desc") },
+  ];
+
+  const reviews = [
+    { text: t("landing.review1Text"), author: t("landing.review1Author"), role: t("landing.review1Role") },
+    { text: t("landing.review2Text"), author: t("landing.review2Author"), role: t("landing.review2Role") },
+    { text: t("landing.review3Text"), author: t("landing.review3Author"), role: t("landing.review3Role") },
+  ];
+
+  const faqs = [
+    { q: t("landing.faq1Q"), a: t("landing.faq1A") },
+    { q: t("landing.faq2Q"), a: t("landing.faq2A") },
+    { q: t("landing.faq3Q"), a: t("landing.faq3A") },
+    { q: t("landing.faq4Q"), a: t("landing.faq4A") },
   ];
 
   return (
@@ -229,6 +247,49 @@ export default function Landing() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Customer Reviews */}
+      <section className="py-24 px-6 border-t border-border/50">
+        <div className="mx-auto max-w-5xl">
+          <h2 className="text-3xl font-bold text-center sm:text-4xl mb-16">{t("landing.reviewsTitle")}</h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {reviews.map((r, i) => (
+              <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}>
+                <Card className="h-full border-border/50 bg-card/50">
+                  <CardContent className="p-6 flex flex-col h-full">
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <Quote className="h-5 w-5 text-primary/30 mb-2" />
+                    <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">{r.text}</p>
+                    <div className="border-t border-border/50 pt-4">
+                      <p className="text-sm font-semibold">{r.author}</p>
+                      <p className="text-xs text-muted-foreground">{r.role}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-24 px-6 border-t border-border/50">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="text-3xl font-bold text-center sm:text-4xl mb-12">{t("landing.faqTitle")}</h2>
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, i) => (
+              <AccordionItem key={i} value={`faq-${i}`} className="border-border/50">
+                <AccordionTrigger className="text-left text-sm hover:no-underline">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground text-sm leading-relaxed">{faq.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 
