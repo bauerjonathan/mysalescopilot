@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { SessionHeader } from "./SessionHeader";
 import { TranscriptPanel } from "./TranscriptPanel";
 import { SuggestionsPanel } from "./SuggestionsPanel";
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function LiveSession({ context, onStop }: Props) {
+  const { t, i18n } = useTranslation();
   const { entries, partialText, isConnected, isPaused, systemAudioActive, start, stop, pause, resume } =
     useTranscription();
   const { suggestions, isLoading, generateSuggestion } = useSuggestions(context);
@@ -23,11 +25,11 @@ export function LiveSession({ context, onStop }: Props) {
 
   useEffect(() => {
     sessionStartTime.current = Date.now();
-    start().catch((err) => {
+    start(i18n.language).catch((err) => {
       toast({
         variant: "destructive",
-        title: "Fehler",
-        description: err.message || "Mikrofon konnte nicht aktiviert werden.",
+        title: t("live.error"),
+        description: err.message || t("live.micError"),
       });
     });
     return () => stop();

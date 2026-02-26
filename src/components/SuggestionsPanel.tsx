@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AiSuggestion } from "@/types/session";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +13,7 @@ interface Props {
 
 export function SuggestionsPanel({ suggestions, isLoading }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -20,7 +22,7 @@ export function SuggestionsPanel({ suggestions, isLoading }: Props) {
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
-        <h2 className="text-sm font-semibold text-foreground">KI-Vorschläge</h2>
+        <h2 className="text-sm font-semibold text-foreground">{t("live.aiSuggestions")}</h2>
         {isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />}
       </div>
       <ScrollArea className="flex-1 p-4">
@@ -44,7 +46,7 @@ export function SuggestionsPanel({ suggestions, isLoading }: Props) {
                     <MessageSquare className="h-3.5 w-3.5 text-primary" />
                   )}
                   <span className="text-xs font-medium text-muted-foreground">
-                    {s.type === "objection" ? "Einwandbehandlung" : "Antwortvorschlag"}
+                    {s.type === "objection" ? t("live.objectionHandling") : t("live.responseSuggestion")}
                   </span>
                 </div>
                 <div className="prose prose-sm max-w-none text-sm leading-relaxed text-foreground/90">
@@ -56,7 +58,7 @@ export function SuggestionsPanel({ suggestions, isLoading }: Props) {
 
           {suggestions.length === 0 && !isLoading && (
             <p className="py-8 text-center text-sm text-muted-foreground">
-              Vorschläge erscheinen hier, sobald der Kunde spricht…
+              {t("live.suggestionsAppear")}
             </p>
           )}
         </div>

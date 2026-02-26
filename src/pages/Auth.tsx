@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -11,6 +12,7 @@ export default function Auth() {
   const { user, loading, signUp, signIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,11 +38,11 @@ export default function Auth() {
     if (error) {
       toast({
         variant: "destructive",
-        title: isLogin ? "Login fehlgeschlagen" : "Registrierung fehlgeschlagen",
+        title: isLogin ? t("auth.loginFailed") : t("auth.signUpFailed"),
         description: error.message,
       });
     } else if (!isLogin) {
-      toast({ title: "Account erstellt!", description: "Du bist jetzt eingeloggt." });
+      toast({ title: t("auth.accountCreated"), description: t("auth.accountCreatedDesc") });
     }
     setSubmitting(false);
   };
@@ -54,7 +56,7 @@ export default function Auth() {
         className="absolute top-4 left-4 gap-1.5 text-muted-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
-        Zurück
+        {t("nav.back")}
       </Button>
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
@@ -62,26 +64,24 @@ export default function Auth() {
             <Headphones className="h-5 w-5 text-primary" />
           </div>
           <CardTitle className="text-xl">
-            {isLogin ? "Willkommen zurück" : "Account erstellen"}
+            {isLogin ? t("auth.welcomeBack") : t("auth.createAccount")}
           </CardTitle>
           <CardDescription>
-            {isLogin
-              ? "Melde dich an um SalesCopilot zu nutzen"
-              : "Erstelle einen Account für SalesCopilot"}
+            {isLogin ? t("auth.signInDesc") : t("auth.signUpDesc")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               type="email"
-              placeholder="E-Mail"
+              placeholder={t("auth.email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
             <Input
               type="password"
-              placeholder="Passwort"
+              placeholder={t("auth.password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -89,7 +89,7 @@ export default function Auth() {
             />
             <Button type="submit" className="w-full" disabled={submitting}>
               {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLogin ? "Anmelden" : "Registrieren"}
+              {isLogin ? t("auth.signIn") : t("auth.signUp")}
             </Button>
           </form>
           <div className="mt-4 text-center">
@@ -98,9 +98,7 @@ export default function Auth() {
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              {isLogin
-                ? "Noch kein Account? Registrieren"
-                : "Bereits registriert? Anmelden"}
+              {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}
             </button>
           </div>
         </CardContent>

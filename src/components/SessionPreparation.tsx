@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,24 +13,6 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { TIERS, TierKey } from "@/config/tiers";
 
-const TEMPLATES: Record<CallType, Partial<CustomerContext>> = {
-  "cold-call": {
-    notes: "Ziel: Interesse wecken, Termin vereinbaren.\nWichtig: Kurz halten, Mehrwert betonen.",
-  },
-  consulting: {
-    notes: "Ziel: Bedürfnisse analysieren, Lösung präsentieren.\nWichtig: Zuhören, gezielte Fragen stellen.",
-  },
-  "follow-up": {
-    notes: "Ziel: Offene Fragen klären, Abschluss erzielen.\nWichtig: Auf vorheriges Gespräch Bezug nehmen.",
-  },
-};
-
-const CALL_TYPE_LABELS: Record<CallType, { label: string; icon: React.ReactNode }> = {
-  "cold-call": { label: "Kaltakquise", icon: <Phone className="h-4 w-4" /> },
-  consulting: { label: "Consulting", icon: <Briefcase className="h-4 w-4" /> },
-  "follow-up": { label: "Follow-up", icon: <RotateCcw className="h-4 w-4" /> },
-};
-
 interface Props {
   onStart: (context: CustomerContext) => void;
 }
@@ -37,13 +20,25 @@ interface Props {
 export function SessionPreparation({ onStart }: Props) {
   const { subscription, openCustomerPortal, createCheckout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const TEMPLATES: Record<CallType, Partial<CustomerContext>> = {
+    "cold-call": { notes: t("session.coldCallNotes") },
+    consulting: { notes: t("session.consultingNotes") },
+    "follow-up": { notes: t("session.followUpNotes") },
+  };
+
+  const CALL_TYPE_LABELS: Record<CallType, { label: string; icon: React.ReactNode }> = {
+    "cold-call": { label: t("session.coldCall"), icon: <Phone className="h-4 w-4" /> },
+    consulting: { label: t("session.consulting"), icon: <Briefcase className="h-4 w-4" /> },
+    "follow-up": { label: t("session.followUp"), icon: <RotateCcw className="h-4 w-4" /> },
+  };
 
   const isLimitReached =
     subscription.subscribed &&
     subscription.minutesLimit < 999999 &&
     subscription.minutesUsed >= subscription.minutesLimit;
 
-  // If on free tier, show upgrade to unlimited
   const nextTier = subscription.tier === "free" ? TIERS.unlimited : null;
   const [context, setContext] = useState<CustomerContext>({
     name: "",
@@ -83,26 +78,27 @@ export function SessionPreparation({ onStart }: Props) {
                 Sales Copilot
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Session vorbereiten
+                {t("session.prepareSession")}
               </p>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-5">
-          {/* Limit reached banner */}
           {isLimitReached && (
             <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 space-y-3">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-foreground">
-                    Minutenlimit erreicht
+                    {t("session.limitReached")}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Du hast alle {subscription.minutesLimit} Minuten in diesem Monat verbraucht.
+                    {t("session.limitReachedDesc", { limit: subscription.minutesLimit })}
                     {nextTier
-                      ? ` Upgrade auf ${nextTier.name} für ${nextTier.minutes_limit === Infinity ? "unbegrenzte" : nextTier.minutes_limit} Minuten.`
-                      : " Dein Kontingent wird am Monatsanfang zurückgesetzt."}
+                      ? " " + (nextTier.minutes_limit === Infinity
+                          ? t("session.upgradeForUnlimited", { tier: nextTier.name })
+                          : t("session.upgradeFor", { tier: nextTier.name, minutes: nextTier.minutes_limit }))
+                      : ""}
                   </p>
                 </div>
               </div>
@@ -114,15 +110,15 @@ export function SessionPreparation({ onStart }: Props) {
                     onClick={() => createCheckout(nextTier.price_id!)}
                   >
                     <ArrowUpCircle className="h-3.5 w-3.5" />
-                    Upgrade auf {nextTier.name}
+                    {t("session.upgradeTo", { tier: nextTier.name })}
                   </Button>
                 )}
               </div>
             </div>
           )}
-          {/* Call Type */}
+
           <div className="space-y-2">
-            <Label className="text-muted-foreground">Gesprächstyp</Label>
+            <Label className="text-muted-foreground">{t("session.callType")}</Label>
             <RadioGroup
               value={context.callType}
               onValueChange={(v) => setCallType(v as CallType)}
@@ -147,59 +143,29 @@ export function SessionPreparation({ onStart }: Props) {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-muted-foreground">Kundenname</Label>
-              <Input
-                id="name"
-                value={context.name}
-                onChange={(e) => update("name", e.target.value)}
-                placeholder="Max Mustermann"
-                className="bg-background"
-              />
+              <Label htmlFor="name" className="text-muted-foreground">{t("session.customerName")}</Label>
+              <Input id="name" value={context.name} onChange={(e) => update("name", e.target.value)} placeholder={t("session.customerNamePlaceholder")} className="bg-background" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="company" className="text-muted-foreground">Firma</Label>
-              <Input
-                id="company"
-                value={context.company}
-                onChange={(e) => update("company", e.target.value)}
-                placeholder="Muster GmbH"
-                className="bg-background"
-              />
+              <Label htmlFor="company" className="text-muted-foreground">{t("session.company")}</Label>
+              <Input id="company" value={context.company} onChange={(e) => update("company", e.target.value)} placeholder={t("session.companyPlaceholder")} className="bg-background" />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="industry" className="text-muted-foreground">Branche</Label>
-              <Input
-                id="industry"
-                value={context.industry}
-                onChange={(e) => update("industry", e.target.value)}
-                placeholder="z.B. SaaS, E-Commerce"
-                className="bg-background"
-              />
+              <Label htmlFor="industry" className="text-muted-foreground">{t("session.industry")}</Label>
+              <Input id="industry" value={context.industry} onChange={(e) => update("industry", e.target.value)} placeholder={t("session.industryPlaceholder")} className="bg-background" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="product" className="text-muted-foreground">Produkt / Service</Label>
-              <Input
-                id="product"
-                value={context.product}
-                onChange={(e) => update("product", e.target.value)}
-                placeholder="z.B. CRM-Software"
-                className="bg-background"
-              />
+              <Label htmlFor="product" className="text-muted-foreground">{t("session.productService")}</Label>
+              <Input id="product" value={context.product} onChange={(e) => update("product", e.target.value)} placeholder={t("session.productPlaceholder")} className="bg-background" />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="notes" className="text-muted-foreground">Kontext & Hinweise</Label>
-            <Textarea
-              id="notes"
-              value={context.notes}
-              onChange={(e) => update("notes", e.target.value)}
-              rows={4}
-              className="bg-background font-mono text-sm"
-            />
+            <Label htmlFor="notes" className="text-muted-foreground">{t("session.contextNotes")}</Label>
+            <Textarea id="notes" value={context.notes} onChange={(e) => update("notes", e.target.value)} rows={4} className="bg-background font-mono text-sm" />
           </div>
 
           <Button
@@ -209,7 +175,7 @@ export function SessionPreparation({ onStart }: Props) {
             disabled={isLimitReached}
           >
             <Mic className="h-4 w-4" />
-            {isLimitReached ? "Minutenlimit erreicht" : "Gespräch starten"}
+            {isLimitReached ? t("session.limitReached") : t("session.startSession")}
           </Button>
         </CardContent>
       </Card>

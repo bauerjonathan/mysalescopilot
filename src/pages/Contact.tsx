@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, Headphones, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,18 +10,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 
-const contactSchema = z.object({
-  name: z.string().trim().min(1, "Bitte gib deinen Namen ein.").max(100),
-  email: z.string().trim().email("Bitte gib eine gültige E-Mail-Adresse ein.").max(255),
-  message: z.string().trim().min(1, "Bitte gib eine Nachricht ein.").max(2000),
-});
-
 export default function Contact() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
+
+  const contactSchema = z.object({
+    name: z.string().trim().min(1, t("contact.nameError")).max(100),
+    email: z.string().trim().email(t("contact.emailError")).max(255),
+    message: z.string().trim().min(1, t("contact.messageError")).max(2000),
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,11 +39,10 @@ export default function Contact() {
     }
 
     setSending(true);
-    // Simulate sending — replace with edge function if needed
     await new Promise((r) => setTimeout(r, 800));
     setSending(false);
 
-    toast({ title: "Nachricht gesendet!", description: "Wir melden uns so schnell wie möglich bei dir." });
+    toast({ title: t("contact.sent"), description: t("contact.sentDesc") });
     setForm({ name: "", email: "", message: "" });
   };
 
@@ -58,59 +59,40 @@ export default function Contact() {
             </span>
           </button>
           <Button variant="ghost" size="sm" onClick={() => navigate(-1 as any)} className="gap-1.5">
-            <ArrowLeft className="h-3.5 w-3.5" /> Zurück
+            <ArrowLeft className="h-3.5 w-3.5" /> {t("nav.back")}
           </Button>
         </div>
       </nav>
 
       <main className="pt-32 pb-20 px-6">
         <div className="mx-auto max-w-lg">
-          <h1 className="text-3xl font-bold mb-2 text-center">Kontakt</h1>
-          <p className="text-muted-foreground text-center mb-8">
-            Hast du Fragen oder Feedback? Schreib uns eine Nachricht.
-          </p>
+          <h1 className="text-3xl font-bold mb-2 text-center">{t("contact.title")}</h1>
+          <p className="text-muted-foreground text-center mb-8">{t("contact.description")}</p>
 
           <Card className="border-border/50">
             <CardContent className="p-6">
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Dein Name"
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                  />
+                  <Label htmlFor="name">{t("contact.name")}</Label>
+                  <Input id="name" placeholder={t("contact.namePlaceholder")} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
                   {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">E-Mail</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="deine@email.de"
-                    value={form.email}
-                    onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                  />
+                  <Label htmlFor="email">{t("contact.email")}</Label>
+                  <Input id="email" type="email" placeholder={t("contact.emailPlaceholder")} value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
                   {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message">Nachricht</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Deine Nachricht..."
-                    rows={5}
-                    value={form.message}
-                    onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-                  />
+                  <Label htmlFor="message">{t("contact.message")}</Label>
+                  <Textarea id="message" placeholder={t("contact.messagePlaceholder")} rows={5} value={form.message} onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))} />
                   {errors.message && <p className="text-sm text-destructive">{errors.message}</p>}
                 </div>
 
                 <Button type="submit" className="w-full gap-2" disabled={sending}>
                   <Send className="h-4 w-4" />
-                  {sending ? "Wird gesendet..." : "Nachricht senden"}
+                  {sending ? t("contact.sending") : t("contact.send")}
                 </Button>
               </form>
             </CardContent>

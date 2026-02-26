@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Mic, MicOff, Square, User, Building, Monitor } from "lucide-react";
@@ -16,6 +17,7 @@ interface Props {
 
 export function SessionHeader({ context, isRecording, isPaused, systemAudioActive, onPause, onResume, onStop }: Props) {
   const [elapsed, setElapsed] = useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isRecording || isPaused) return;
@@ -32,7 +34,6 @@ export function SessionHeader({ context, isRecording, isPaused, systemAudioActiv
   return (
     <header className="flex items-center justify-between border-b border-border bg-card px-6 py-3">
       <div className="flex items-center gap-4">
-        {/* Recording indicator */}
         <div className="flex items-center gap-2">
           <div
             className={`h-2.5 w-2.5 rounded-full ${
@@ -48,24 +49,22 @@ export function SessionHeader({ context, isRecording, isPaused, systemAudioActiv
 
         <div className="h-4 w-px bg-border" />
 
-        {/* Audio source indicator */}
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="gap-1.5 text-xs">
             <Mic className="h-3 w-3 text-primary" />
-            Mikrofon
+            {t("live.microphone")}
           </Badge>
           <Badge
             variant={systemAudioActive ? "outline" : "secondary"}
             className="gap-1.5 text-xs"
           >
             <Monitor className="h-3 w-3" />
-            {systemAudioActive ? "System-Audio aktiv" : "Kein System-Audio"}
+            {systemAudioActive ? t("live.systemAudioActive") : t("live.noSystemAudio")}
           </Badge>
         </div>
 
         <div className="h-4 w-px bg-border" />
 
-        {/* Customer info */}
         <div className="flex items-center gap-3 text-sm">
           {context.name && (
             <span className="flex items-center gap-1.5 text-foreground">
@@ -83,23 +82,13 @@ export function SessionHeader({ context, isRecording, isPaused, systemAudioActiv
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={isPaused ? onResume : onPause}
-          className="gap-1.5"
-        >
+        <Button variant="outline" size="sm" onClick={isPaused ? onResume : onPause} className="gap-1.5">
           {isPaused ? <Mic className="h-3.5 w-3.5" /> : <MicOff className="h-3.5 w-3.5" />}
-          {isPaused ? "Fortsetzen" : "Pause"}
+          {isPaused ? t("live.resume") : t("live.pause")}
         </Button>
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={onStop}
-          className="gap-1.5"
-        >
+        <Button variant="destructive" size="sm" onClick={onStop} className="gap-1.5">
           <Square className="h-3.5 w-3.5" />
-          Beenden
+          {t("live.stop")}
         </Button>
       </div>
     </header>
