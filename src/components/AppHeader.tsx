@@ -4,13 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { TIERS } from "@/config/tiers";
 import {
-  Headphones,
   LogOut,
   CreditCard,
   Settings,
   Crown,
   Clock,
 } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,19 +30,9 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-        {/* Logo – links to landing */}
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/20">
-            <Headphones className="h-4 w-4 text-primary" />
-          </div>
-          <span className="text-lg font-semibold tracking-tight">
-            Sales<span className="text-primary">Copilot</span>
-          </span>
-        </button>
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6">
+        {/* Sidebar trigger */}
+        <SidebarTrigger />
 
         {/* Right side */}
         <div className="flex items-center gap-3">

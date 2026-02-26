@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { SessionPreparation } from "@/components/SessionPreparation";
 import { LiveSession } from "@/components/LiveSession";
 import { SessionSummary } from "@/components/SessionSummary";
-import { AppHeader } from "@/components/AppHeader";
 import { CustomerContext, SessionPhase, TranscriptEntry } from "@/types/session";
 
 const Index = () => {
@@ -27,17 +26,14 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      {phase !== "live" && <AppHeader />}
-      <div className="flex-1 overflow-hidden">
-        {phase === "preparation" && <SessionPreparation onStart={handleStart} />}
-        {phase === "live" && context && (
-          <LiveSession context={context} onStop={handleStop} />
-        )}
-        {phase === "summary" && (
-          <SessionSummary entries={transcriptRef.current} onNewSession={handleNewSession} />
-        )}
-      </div>
+    <div className="flex-1 overflow-hidden">
+      {phase === "preparation" && <SessionPreparation onStart={handleStart} />}
+      {phase === "live" && context && (
+        <LiveSession context={context} onStop={handleStop} />
+      )}
+      {phase === "summary" && (
+        <SessionSummary entries={transcriptRef.current} onNewSession={handleNewSession} />
+      )}
     </div>
   );
 };
