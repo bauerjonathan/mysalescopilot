@@ -109,7 +109,7 @@ export function SessionPreparation({ onStart }: Props) {
                 value={context.name}
                 onChange={(e) => update("name", e.target.value)}
                 placeholder="Max Mustermann"
-                className="bg-secondary/50"
+                className="bg-background"
               />
             </div>
             <div className="space-y-1.5">
@@ -119,7 +119,7 @@ export function SessionPreparation({ onStart }: Props) {
                 value={context.company}
                 onChange={(e) => update("company", e.target.value)}
                 placeholder="Muster GmbH"
-                className="bg-secondary/50"
+                className="bg-background"
               />
             </div>
           </div>
@@ -132,7 +132,7 @@ export function SessionPreparation({ onStart }: Props) {
                 value={context.industry}
                 onChange={(e) => update("industry", e.target.value)}
                 placeholder="z.B. SaaS, E-Commerce"
-                className="bg-secondary/50"
+                className="bg-background"
               />
             </div>
             <div className="space-y-1.5">
@@ -142,7 +142,7 @@ export function SessionPreparation({ onStart }: Props) {
                 value={context.product}
                 onChange={(e) => update("product", e.target.value)}
                 placeholder="z.B. CRM-Software"
-                className="bg-secondary/50"
+                className="bg-background"
               />
             </div>
           </div>
@@ -154,7 +154,7 @@ export function SessionPreparation({ onStart }: Props) {
               value={context.notes}
               onChange={(e) => update("notes", e.target.value)}
               rows={4}
-              className="bg-secondary/50 font-mono text-sm"
+              className="bg-background font-mono text-sm"
             />
           </div>
 
