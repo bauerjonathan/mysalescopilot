@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -80,6 +81,7 @@ const pricingFeatures = [
 
 export default function Landing() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -95,20 +97,32 @@ export default function Landing() {
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/auth")}
-            >
-              Anmelden
-            </Button>
-            <Button
-              onClick={() => navigate("/auth")}
-              size="sm"
-              className="gap-1.5"
-            >
-              Jetzt starten <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
+            {user ? (
+              <Button
+                onClick={() => navigate("/app")}
+                size="sm"
+                className="gap-1.5"
+              >
+                Zur App <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate("/auth")}
+                >
+                  Anmelden
+                </Button>
+                <Button
+                  onClick={() => navigate("/auth")}
+                  size="sm"
+                  className="gap-1.5"
+                >
+                  Jetzt starten <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>
