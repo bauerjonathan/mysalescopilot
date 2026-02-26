@@ -23,6 +23,7 @@ export function useTranscription() {
   const scribe = useScribe({
     modelId: "scribe_v2_realtime",
     commitStrategy: "vad" as any,
+    languageCode: "de",
     onPartialTranscript: (data) => {
       if (!isPaused) {
         setPartialText(data.text);
