@@ -206,13 +206,13 @@ export default function Landing() {
                   <p className="text-xs text-muted-foreground font-mono mb-2">
                     TRANSKRIPT
                   </p>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <p className="text-sm">
                       <span className="text-[hsl(var(--transcript-user))] font-medium">
                         Du:
                       </span>{" "}
                       <span className="text-foreground/80">
-                        Guten Tag, ich rufe an wegen unserer neuen Lösung für...
+                        Unsere Plattform automatisiert Ihre komplette Rechnungsstellung – von der Erstellung bis zum Versand.
                       </span>
                     </p>
                     <p className="text-sm">
@@ -220,22 +220,37 @@ export default function Landing() {
                         Kunde:
                       </span>{" "}
                       <span className="text-foreground/80">
-                        Das klingt interessant, aber wir haben aktuell kein Budget...
+                        Das klingt gut, aber ehrlich gesagt haben wir gerade andere Prioritäten und kein Budget dafür eingeplant.
+                      </span>
+                    </p>
+                    <p className="text-sm">
+                      <span className="text-[hsl(var(--transcript-user))] font-medium text-foreground/40">
+                        Du:
+                      </span>{" "}
+                      <span className="text-foreground/40 italic">
+                        tippt…
                       </span>
                     </p>
                   </div>
                 </div>
-                <div className="p-4">
+                <div className="p-4 space-y-3">
                   <p className="text-xs text-muted-foreground font-mono mb-2">
                     KI-VORSCHLAG
                   </p>
-                  <div className="rounded-lg border border-[hsl(var(--suggestion-border))] bg-[hsl(var(--suggestion-bg))] p-3">
-                    <p className="text-xs font-semibold text-primary mb-1">
-                      💡 Einwand: Budget
+                  <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 mb-2">
+                    <p className="text-xs font-semibold text-destructive mb-1">
+                      ⚡ Einwand erkannt: Budget
                     </p>
                     <p className="text-sm text-foreground/80">
-                      „Ich verstehe. Darf ich fragen – was wäre, wenn sich die
-                      Lösung innerhalb von 3 Monaten selbst refinanziert?"
+                      „Verstehe ich – genau deshalb lohnt sich ein Blick: Unsere Kunden sparen im Schnitt <strong>12 Stunden pro Monat</strong>. Darf ich Ihnen kurz zeigen, wie sich das bei Ihnen rechnet?"
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-[hsl(var(--suggestion-border))] bg-[hsl(var(--suggestion-bg))] p-3">
+                    <p className="text-xs font-semibold text-primary mb-1">
+                      💡 Alternativ
+                    </p>
+                    <p className="text-sm text-foreground/80">
+                      „Was wäre, wenn wir mit einem kostenlosen Pilotprojekt starten – ganz ohne Risiko für Sie?"
                     </p>
                   </div>
                 </div>
@@ -337,10 +352,10 @@ export default function Landing() {
       <section id="pricing" className="py-24 px-6 border-t border-border/50">
         <div className="mx-auto max-w-lg text-center">
           <h2 className="text-3xl font-bold sm:text-4xl mb-4">
-            Ein Preis. Alles drin.
+            Starte kostenlos. Überzeuge dich selbst.
           </h2>
           <p className="text-muted-foreground text-lg mb-12">
-            Kein Kleingedrucktes, keine versteckten Kosten.
+            14 Tage lang alles testen – danach entscheidest du.
           </p>
 
           <motion.div
@@ -352,13 +367,16 @@ export default function Landing() {
             <Card className="border-primary/30 bg-card relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
               <CardContent className="p-8">
-                <Badge className="mb-4">Beliebtester Plan</Badge>
-                <div className="flex items-baseline justify-center gap-1 mb-2">
-                  <span className="text-5xl font-bold">25€</span>
-                  <span className="text-muted-foreground">/Monat</span>
+                <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">14 Tage kostenlos</Badge>
+                <div className="flex items-baseline justify-center gap-1 mb-1">
+                  <span className="text-lg text-muted-foreground line-through mr-2">25€</span>
+                  <span className="text-5xl font-bold">0€</span>
                 </div>
-                <p className="text-sm text-muted-foreground mb-8">
-                  Monatlich kündbar. Keine Bindung.
+                <p className="text-sm text-muted-foreground mb-2">
+                  für die ersten 14 Tage
+                </p>
+                <p className="text-xs text-muted-foreground mb-8">
+                  Danach 25€/Monat · jederzeit kündbar · keine Bindung
                 </p>
 
                 <ul className="space-y-3 text-left mb-8">
@@ -375,11 +393,11 @@ export default function Landing() {
                   className="w-full gap-2 text-base"
                   onClick={() => navigate("/auth")}
                 >
-                  Jetzt starten
+                  14 Tage kostenlos testen
                   <ArrowRight className="h-4 w-4" />
                 </Button>
                 <p className="mt-3 text-xs text-muted-foreground">
-                  14 Tage kostenlos testen – keine Kreditkarte nötig
+                  Keine Kosten während der Testphase. Jederzeit kündbar.
                 </p>
               </CardContent>
             </Card>
