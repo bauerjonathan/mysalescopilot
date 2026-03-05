@@ -24,7 +24,15 @@ import {
   FileText,
   Star,
   Quote,
+  GraduationCap,
+  Phone,
+  RotateCcw,
+  BarChart3,
+  Sparkles,
 } from "lucide-react";
+import personaFriendly from "@/assets/persona-friendly.jpg";
+import personaSkeptical from "@/assets/persona-skeptical.jpg";
+import personaTough from "@/assets/persona-tough.jpg";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
