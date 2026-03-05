@@ -186,7 +186,17 @@
     "allRightsReserved": "Alle Rechte vorbehalten.",
     "impressum": "Impressum",
     "datenschutz": "Datenschutz",
-    "kontakt": "Kontakt"
+    "kontakt": "Kontakt",
+    "trainingTitle": "KI-gestütztes Sales Training",
+    "trainingDesc": "Übe Verkaufsgespräche mit realistischen KI-Kunden – personalisiert auf dein Produkt und deine Branche.",
+    "trainingFeature1Title": "Branchenunabhängig",
+    "trainingFeature1Desc": "Ob SaaS, Versicherung oder Maschinenbau – die KI passt sich automatisch an dein Produkt und deine Zielgruppe an.",
+    "trainingFeature2Title": "3 Schwierigkeitsstufen",
+    "trainingFeature2Desc": "Von freundlichen Einsteiger-Kunden bis zu abweisenden Einkaufsleitern, die dir 30 Sekunden geben.",
+    "trainingFeature3Title": "Realistische Szenarien",
+    "trainingFeature3Desc": "Kaltakquise, Beratungsgespräche und Follow-ups – übe genau die Situationen, die dir im Alltag begegnen.",
+    "trainingFeature4Title": "Detaillierte Auswertung",
+    "trainingFeature4Desc": "Nach jedem Gespräch erhältst du Scores in 5 Kategorien, Stärken, Verbesserungsvorschläge und einen Profi-Tipp."
   },
   "contact": {
     "title": "Kontakt",
@@ -235,7 +245,12 @@
     "strengths": "Stärken",
     "improvements": "Verbesserungsvorschläge",
     "proTip": "💡 Profi-Tipp",
-    "tryAgain": "Nochmal trainieren"
+    "tryAgain": "Nochmal trainieren",
+    "personalizedFor": "Personalisiert für {{company}}",
+    "personalizedDesc": "Die KI-Kunden nutzen deinen Firmenkontext und reagieren auf dein spezifisches Produkt, deine Zielgruppe und deine USPs.",
+    "noProfileTitle": "Trainiere mit deinem eigenen Produkt",
+    "noProfileDesc": "Hinterlege dein Firmenprofil, damit die KI-Kunden branchenspezifisch auf dein Produkt reagieren – egal ob SaaS, Versicherung oder Industriemaschinen.",
+    "setupProfile": "Profil einrichten"
   },
   "tiers": {
     "testMinutes": "{{count}} Test-Minuten",

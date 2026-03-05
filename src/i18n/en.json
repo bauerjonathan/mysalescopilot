@@ -186,7 +186,17 @@
     "allRightsReserved": "All rights reserved.",
     "impressum": "Legal Notice",
     "datenschutz": "Privacy Policy",
-    "kontakt": "Contact"
+    "kontakt": "Contact",
+    "trainingTitle": "AI-Powered Sales Training",
+    "trainingDesc": "Practice sales conversations with realistic AI customers – personalized to your product and industry.",
+    "trainingFeature1Title": "Industry-Agnostic",
+    "trainingFeature1Desc": "Whether SaaS, insurance, or manufacturing – the AI automatically adapts to your product and target audience.",
+    "trainingFeature2Title": "3 Difficulty Levels",
+    "trainingFeature2Desc": "From friendly starter customers to dismissive procurement managers who give you 30 seconds.",
+    "trainingFeature3Title": "Realistic Scenarios",
+    "trainingFeature3Desc": "Cold calls, consulting sessions, and follow-ups – practice exactly the situations you face every day.",
+    "trainingFeature4Title": "Detailed Evaluation",
+    "trainingFeature4Desc": "After each call, get scores in 5 categories, strengths, improvement suggestions, and a pro tip."
   },
   "contact": {
     "title": "Contact",
@@ -235,7 +245,12 @@
     "strengths": "Strengths",
     "improvements": "Improvements",
     "proTip": "💡 Pro Tip",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "personalizedFor": "Personalized for {{company}}",
+    "personalizedDesc": "AI customers use your company context and respond to your specific product, target audience, and USPs.",
+    "noProfileTitle": "Train with your own product",
+    "noProfileDesc": "Set up your company profile so AI customers respond to your specific product – whether SaaS, insurance, or industrial machinery.",
+    "setupProfile": "Set up profile"
   },
   "tiers": {
     "testMinutes": "{{count}} test minutes",
