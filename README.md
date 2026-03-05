@@ -1,73 +1,50 @@
-# Welcome to your Lovable project
+# 🎯 SalesCopilot – AI-Powered Sales Assistant & Training Platform
 
-## Project info
+## Motivation
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Vertriebsteams stehen täglich vor der Herausforderung, in Echtzeit die richtigen Argumente zu finden, Einwände souverän zu behandeln und Gespräche zum Abschluss zu führen. Bestehende CRM-Tools helfen bei der Nachbereitung – aber nicht *während* des Gesprächs. SalesCopilot schließt diese Lücke: Ein KI-Assistent, der live mithört und sofort passende Antwortvorschläge liefert, kombiniert mit einem Trainingsmodul, in dem Vertriebler gegen realistische KI-Kunden üben können – branchenunabhängig und angepasst an das eigene Produkt.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **🎙️ Echtzeit Sales Copilot** – Live-Transkription von Verkaufsgesprächen mit sofortigen KI-Antwortvorschlägen und Einwandbehandlung
+- **🤖 KI Sales Training** – Simulierte Verkaufsgespräche mit adaptiven KI-Kunden-Personas in 3 Schwierigkeitsstufen
+- **🏢 Firmenprofil-Integration** – Training und Vorschläge werden automatisch auf das eigene Produkt, die Zielgruppe und USPs zugeschnitten
+- **🎤 Voice Chat** – Sprachbasiertes Training mit Text-to-Speech für realistische Gesprächssimulationen
+- **📊 Auswertung** – Detaillierte Bewertung nach jedem Training mit Scores und konkretem Feedback
 
-**Use Lovable**
+## Tech Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+| Bereich | Technologie |
+|---|---|
+| **Frontend** | React 18, TypeScript, Vite |
+| **Styling** | Tailwind CSS, shadcn/ui, Framer Motion |
+| **Backend** | Supabase (Auth, PostgreSQL, Edge Functions) |
+| **KI / LLM** | Google Gemini 2.5 Flash via Lovable AI Gateway |
+| **Live-Transkription** | Gladia.io Realtime API |
+| **Sprachausgabe** | ElevenLabs TTS + Web Speech API (Fallback) |
+| **Payments** | Stripe (Checkout, Customer Portal) |
+| **i18n** | i18next (Deutsch / Englisch) |
+| **State Management** | TanStack React Query |
+| **Routing** | React Router v6 |
 
-Changes made via Lovable will be committed automatically to this repo.
+## Architektur
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+Browser (React SPA)
+  ├── Live Session ──→ Gladia.io (Transkription) ──→ Gemini (Vorschläge)
+  ├── Training ──→ Gemini (KI-Kunde) ──→ ElevenLabs (TTS)
+  └── Supabase (Auth, DB, Edge Functions, Stripe Webhooks)
 ```
 
-**Edit a file directly in GitHub**
+## Entwicklung
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+# Repository klonen
+git clone <YOUR_GIT_URL>
 
-**Use GitHub Codespaces**
+# Abhängigkeiten installieren
+npm install
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+# Entwicklungsserver starten
+npm run dev
+```
