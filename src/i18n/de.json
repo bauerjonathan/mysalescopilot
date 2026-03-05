@@ -235,7 +235,12 @@
     "strengths": "Stärken",
     "improvements": "Verbesserungsvorschläge",
     "proTip": "💡 Profi-Tipp",
-    "tryAgain": "Nochmal trainieren"
+    "tryAgain": "Nochmal trainieren",
+    "personalizedFor": "Personalisiert für {{company}}",
+    "personalizedDesc": "Die KI-Kunden nutzen deinen Firmenkontext und reagieren auf dein spezifisches Produkt, deine Zielgruppe und deine USPs.",
+    "noProfileTitle": "Trainiere mit deinem eigenen Produkt",
+    "noProfileDesc": "Hinterlege dein Firmenprofil, damit die KI-Kunden branchenspezifisch auf dein Produkt reagieren – egal ob SaaS, Versicherung oder Industriemaschinen.",
+    "setupProfile": "Profil einrichten"
   },
   "tiers": {
     "testMinutes": "{{count}} Test-Minuten",

@@ -235,7 +235,12 @@
     "strengths": "Strengths",
     "improvements": "Improvements",
     "proTip": "💡 Pro Tip",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "personalizedFor": "Personalized for {{company}}",
+    "personalizedDesc": "AI customers use your company context and respond to your specific product, target audience, and USPs.",
+    "noProfileTitle": "Train with your own product",
+    "noProfileDesc": "Set up your company profile so AI customers respond to your specific product – whether SaaS, insurance, or industrial machinery.",
+    "setupProfile": "Set up profile"
   },
   "tiers": {
     "testMinutes": "{{count}} test minutes",
