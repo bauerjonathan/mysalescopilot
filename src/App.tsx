@@ -7,6 +7,7 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Index from "./pages/Index";
 import CompanyProfile from "./pages/CompanyProfile";
+import Training from "./pages/Training";
 import Impressum from "./pages/Impressum";
 import Contact from "./pages/Contact";
 import Datenschutz from "./pages/Datenschutz";
@@ -34,6 +35,7 @@ const App = () => (
             }
           >
             <Route index element={<Index />} />
+            <Route path="training" element={<Training />} />
             <Route path="firma" element={<CompanyProfile />} />
           </Route>
           <Route path="/impressum" element={<Impressum />} />

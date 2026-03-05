@@ -1,6 +1,7 @@
 {
   "nav": {
     "newSession": "New Session",
+    "training": "Training",
     "myCompany": "My Company",
     "navigation": "NAVIGATION",
     "signIn": "Sign In",
@@ -208,6 +209,33 @@
     "title": "404",
     "message": "Page not found",
     "backHome": "Return to Home"
+  },
+  "training": {
+    "title": "Sales Training",
+    "description": "Practice sales calls with AI customers at different difficulty levels.",
+    "difficulty": "Difficulty",
+    "difficultyDesc": "Choose how challenging the customer should be.",
+    "scenario": "Scenario",
+    "scenarioDesc": "Choose the type of conversation.",
+    "startTraining": "Start Training",
+    "readyTitle": "Ready to practice?",
+    "readyDesc": "Click Start and have a simulated sales conversation with the AI customer. Speak out loud – your microphone will be activated.",
+    "startCall": "Start Call",
+    "endCall": "Hang Up",
+    "evaluating": "Evaluating…",
+    "listening": "Listening…",
+    "micOff": "Mic off",
+    "botSpeaking": "Customer speaking…",
+    "you": "You",
+    "customer": "Customer",
+    "micError": "Microphone Error",
+    "evalError": "Evaluation Error",
+    "evalTitle": "Call Evaluation",
+    "categories": "Evaluation Categories",
+    "strengths": "Strengths",
+    "improvements": "Improvements",
+    "proTip": "💡 Pro Tip",
+    "tryAgain": "Try Again"
   },
   "tiers": {
     "testMinutes": "{{count}} test minutes",
