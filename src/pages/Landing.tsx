@@ -258,6 +258,74 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* AI Training Section */}
+      <section className="py-24 px-6 border-t border-border/50">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <span className="inline-flex items-center rounded-full border border-border bg-secondary px-4 py-1.5 text-xs font-medium text-secondary-foreground mb-4">
+              <GraduationCap className="mr-1.5 h-3 w-3 text-primary" />
+              Sales Training
+            </span>
+            <h2 className="text-3xl font-bold sm:text-4xl">{t("landing.trainingTitle")}</h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">{t("landing.trainingDesc")}</p>
+          </div>
+
+          {/* Training feature cards */}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-14">
+            {[
+              { icon: Sparkles, title: t("landing.trainingFeature1Title"), desc: t("landing.trainingFeature1Desc") },
+              { icon: Target, title: t("landing.trainingFeature2Title"), desc: t("landing.trainingFeature2Desc") },
+              { icon: Phone, title: t("landing.trainingFeature3Title"), desc: t("landing.trainingFeature3Desc") },
+              { icon: BarChart3, title: t("landing.trainingFeature4Title"), desc: t("landing.trainingFeature4Desc") },
+            ].map((f, i) => (
+              <motion.div key={f.title} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUp} custom={i}>
+                <Card className="h-full border-border/50 bg-card/50 hover:border-primary/30 transition-colors duration-300">
+                  <CardContent className="p-6">
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                      <f.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="text-base font-semibold mb-2">{f.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Persona showcase */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid gap-5 md:grid-cols-3"
+          >
+            {[
+              { image: personaFriendly, name: "Thomas Berger", role: "Operations Manager", difficulty: "Einfach", diffColor: "bg-primary/10 text-primary", scenario: "Kaltakquise" },
+              { image: personaSkeptical, name: "Dr. Sandra Weiß", role: "IT-Leiterin", difficulty: "Mittel", diffColor: "bg-secondary text-secondary-foreground", scenario: "Beratung" },
+              { image: personaTough, name: "Klaus Richter", role: "Einkaufsleiter", difficulty: "Schwer", diffColor: "bg-destructive/10 text-destructive", scenario: "Kaltakquise" },
+            ].map((p, i) => (
+              <motion.div key={p.name} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}>
+                <Card className="overflow-hidden border-border/50 bg-card/50 hover:border-primary/30 transition-colors duration-300">
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-3 mb-3">
+                      <img src={p.image} alt={p.name} className="h-12 w-12 rounded-xl object-cover ring-2 ring-border" />
+                      <div>
+                        <p className="text-sm font-semibold">{p.name}</p>
+                        <p className="text-xs text-muted-foreground">{p.role}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${p.diffColor}`}>{p.difficulty}</span>
+                      <span className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs text-muted-foreground">{p.scenario}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Customer Reviews */}
       <section className="py-24 px-6 border-t border-border/50">
         <div className="mx-auto max-w-5xl">
