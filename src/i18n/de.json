@@ -1,6 +1,7 @@
 {
   "nav": {
     "newSession": "Neues Gespräch",
+    "training": "Training",
     "myCompany": "Meine Firma",
     "navigation": "NAVIGATION",
     "signIn": "Anmelden",
@@ -208,6 +209,33 @@
     "title": "404",
     "message": "Seite nicht gefunden",
     "backHome": "Zurück zur Startseite"
+  },
+  "training": {
+    "title": "Sales Training",
+    "description": "Übe Verkaufsgespräche mit KI-Kunden in verschiedenen Schwierigkeitsstufen.",
+    "difficulty": "Schwierigkeitsgrad",
+    "difficultyDesc": "Wähle, wie herausfordernd der Kunde sein soll.",
+    "scenario": "Szenario",
+    "scenarioDesc": "Wähle die Art des Gesprächs.",
+    "startTraining": "Training starten",
+    "readyTitle": "Bereit zum Trainieren?",
+    "readyDesc": "Klicke auf Start und führe ein simuliertes Verkaufsgespräch mit dem KI-Kunden. Sprich laut – dein Mikrofon wird aktiviert.",
+    "startCall": "Anruf starten",
+    "endCall": "Auflegen",
+    "evaluating": "Wird ausgewertet…",
+    "listening": "Hört zu…",
+    "micOff": "Mikrofon aus",
+    "botSpeaking": "Kunde spricht…",
+    "you": "Du",
+    "customer": "Kunde",
+    "micError": "Mikrofon-Fehler",
+    "evalError": "Auswertungsfehler",
+    "evalTitle": "Gesprächsauswertung",
+    "categories": "Bewertungskategorien",
+    "strengths": "Stärken",
+    "improvements": "Verbesserungsvorschläge",
+    "proTip": "💡 Profi-Tipp",
+    "tryAgain": "Nochmal trainieren"
   },
   "tiers": {
     "testMinutes": "{{count}} Test-Minuten",

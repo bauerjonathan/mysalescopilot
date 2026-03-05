@@ -14,3 +14,12 @@ verify_jwt = false
 
 [functions.customer-portal]
 verify_jwt = false
+
+[functions.training-chat]
+verify_jwt = false
+
+[functions.training-tts]
+verify_jwt = false
+
+[functions.training-evaluate]
+verify_jwt = false

@@ -1,4 +1,4 @@
-import { Headphones, Building2, Mic } from "lucide-react";
+import { Headphones, Building2, Mic, GraduationCap } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ export function AppSidebar() {
 
   const navItems = [
     { title: t("nav.newSession"), url: "/app", icon: Mic },
+    { title: t("nav.training"), url: "/app/training", icon: GraduationCap },
     { title: t("nav.myCompany"), url: "/app/firma", icon: Building2 },
   ];
 

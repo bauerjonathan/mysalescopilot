@@ -53,6 +53,42 @@ export type Database = {
         }
         Relationships: []
       }
+      training_sessions: {
+        Row: {
+          created_at: string
+          difficulty: string
+          duration_seconds: number | null
+          feedback: Json | null
+          id: string
+          overall_score: number | null
+          scenario: string
+          transcript: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          difficulty: string
+          duration_seconds?: number | null
+          feedback?: Json | null
+          id?: string
+          overall_score?: number | null
+          scenario: string
+          transcript?: Json
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          difficulty?: string
+          duration_seconds?: number | null
+          feedback?: Json | null
+          id?: string
+          overall_score?: number | null
+          scenario?: string
+          transcript?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
       usage_tracking: {
         Row: {
           created_at: string
