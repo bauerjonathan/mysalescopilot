@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Difficulty, TrainingScenario } from "@/types/training";
-import { GraduationCap, Phone, MessageSquare, RotateCcw, Clock, User, Building2, ArrowRight } from "lucide-react";
+import { useCompanyProfile } from "@/hooks/useCompanyProfile";
+import { GraduationCap, Phone, MessageSquare, RotateCcw, Clock, User, Building2, ArrowRight, Sparkles, Building, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import personaFriendly from "@/assets/persona-friendly.jpg";
 import personaSkeptical from "@/assets/persona-skeptical.jpg";
@@ -94,6 +96,10 @@ const categoryLabels: Record<string, { label: string; icon: typeof Phone }> = {
 
 export function TrainingSetup({ onStart }: Props) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { profile } = useCompanyProfile();
+
+  const hasProfile = !!(profile?.company_name && profile?.product_description);
 
   // Group cards by scenario
   const grouped = scenarioCards.reduce((acc, card) => {
@@ -109,7 +115,7 @@ export function TrainingSetup({ onStart }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10"
+          className="mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
@@ -120,6 +126,49 @@ export function TrainingSetup({ onStart }: Props) {
               <p className="text-sm text-muted-foreground">{t("training.description")}</p>
             </div>
           </div>
+        </motion.div>
+
+        {/* Company context banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mb-8"
+        >
+          {hasProfile ? (
+            <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4">
+              <Sparkles className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  {t("training.personalizedFor", { company: profile?.company_name })}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {t("training.personalizedDesc")}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
+              <Building className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-foreground">
+                  {t("training.noProfileTitle")}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {t("training.noProfileDesc")}
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/app/firma")}
+                className="shrink-0 gap-1.5"
+              >
+                {t("training.setupProfile")}
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          )}
         </motion.div>
 
         {/* Scenario Categories */}
