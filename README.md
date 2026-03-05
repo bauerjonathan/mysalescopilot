@@ -35,16 +35,3 @@ Browser (React SPA)
   ├── Training ──→ Gemini (KI-Kunde) ──→ ElevenLabs (TTS)
   └── Supabase (Auth, DB, Edge Functions, Stripe Webhooks)
 ```
-
-## Entwicklung
-
-```sh
-# Repository klonen
-git clone <YOUR_GIT_URL>
-
-# Abhängigkeiten installieren
-npm install
-
-# Entwicklungsserver starten
-npm run dev
-```
