@@ -227,7 +227,7 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
     } finally {
       setIsLoading(false);
     }
-  }, [difficulty, scenario, playTTS]);
+  }, [difficulty, scenario, persona, companyProfile, playTTS]);
 
   const stopAudio = useCallback(() => {
     if (audioRef.current) {
