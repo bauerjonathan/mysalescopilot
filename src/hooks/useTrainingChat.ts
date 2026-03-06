@@ -221,8 +221,11 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
-      setIsSpeaking(false);
     }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
   }, []);
 
   return { messages, isLoading, isSpeaking, sendMessage, startConversation, stopAudio };
