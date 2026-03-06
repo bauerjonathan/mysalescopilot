@@ -149,7 +149,7 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
         setIsLoading(false);
       }
     },
-    [messages, difficulty, scenario, playTTS]
+    [messages, difficulty, scenario, persona, companyProfile, playTTS]
   );
 
   const startConversation = useCallback(async () => {
