@@ -46,12 +46,8 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
 
   const playTTS = useCallback(async (text: string) => {
     try {
+      stopAudioInternal();
       setIsSpeaking(true);
-      const resp = await fetch(TTS_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ text }),
       });
