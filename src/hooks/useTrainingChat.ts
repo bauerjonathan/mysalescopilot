@@ -1,10 +1,18 @@
 import { useState, useCallback, useRef } from "react";
-import { ChatMessage, Difficulty, TrainingScenario } from "@/types/training";
+import { ChatMessage, Difficulty, TrainingScenario, TrainingPersona } from "@/types/training";
+import { CompanyProfile } from "@/hooks/useCompanyProfile";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/training-chat`;
 const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/training-tts`;
 
-export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenario) {
+interface TrainingChatOptions {
+  difficulty: Difficulty;
+  scenario: TrainingScenario;
+  persona?: TrainingPersona;
+  companyProfile?: CompanyProfile;
+}
+
+export function useTrainingChat({ difficulty, scenario, persona, companyProfile }: TrainingChatOptions) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -81,6 +89,8 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
             messages: updatedMessages,
             difficulty,
             scenario,
+            persona,
+            companyProfile,
           }),
           signal: abortRef.current.signal,
         });
@@ -139,7 +149,7 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
         setIsLoading(false);
       }
     },
-    [messages, difficulty, scenario, playTTS]
+    [messages, difficulty, scenario, persona, companyProfile, playTTS]
   );
 
   const startConversation = useCallback(async () => {
@@ -158,6 +168,8 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
           messages: [{ role: "user", content: "Hallo?" }],
           difficulty,
           scenario,
+          persona,
+          companyProfile,
         }),
       });
 
@@ -215,7 +227,7 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
     } finally {
       setIsLoading(false);
     }
-  }, [difficulty, scenario, playTTS]);
+  }, [difficulty, scenario, persona, companyProfile, playTTS]);
 
   const stopAudio = useCallback(() => {
     if (audioRef.current) {

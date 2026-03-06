@@ -2,6 +2,12 @@ export type Difficulty = "easy" | "medium" | "hard";
 export type TrainingScenario = "cold-call" | "consulting" | "follow-up";
 export type TrainingPhase = "setup" | "chat" | "evaluation";
 
+export interface TrainingPersona {
+  name: string;
+  role: string;
+  company: string;
+}
+
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;

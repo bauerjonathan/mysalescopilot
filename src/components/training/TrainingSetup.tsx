@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Difficulty, TrainingScenario } from "@/types/training";
+import { Difficulty, TrainingScenario, TrainingPersona } from "@/types/training";
 import { useCompanyProfile } from "@/hooks/useCompanyProfile";
 import { GraduationCap, Phone, MessageSquare, RotateCcw, Clock, User, Building2, ArrowRight, Sparkles, Building, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -12,7 +12,7 @@ import personaSkeptical from "@/assets/persona-skeptical.jpg";
 import personaTough from "@/assets/persona-tough.jpg";
 
 interface Props {
-  onStart: (difficulty: Difficulty, scenario: TrainingScenario) => void;
+  onStart: (difficulty: Difficulty, scenario: TrainingScenario, persona?: TrainingPersona) => void;
 }
 
 interface ScenarioCard {
@@ -246,7 +246,7 @@ export function TrainingSetup({ onStart }: Props) {
 
                           {/* CTA */}
                           <Button
-                            onClick={() => onStart(card.difficulty, card.scenario)}
+                            onClick={() => onStart(card.difficulty, card.scenario, card.persona)}
                             className="w-full group/btn"
                             size="default"
                           >

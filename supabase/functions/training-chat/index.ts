@@ -37,19 +37,61 @@ const scenarioContexts: Record<string, string> = {
   "follow-up": "Dies ist ein Follow-up-Anruf. Du hattest bereits ein erstes Gespräch, aber noch keine Entscheidung getroffen.",
 };
 
+interface Persona {
+  name: string;
+  role: string;
+  company: string;
+}
+
+interface CompanyProfile {
+  company_name?: string;
+  product_description?: string;
+  target_audience?: string;
+  pain_points?: string;
+  unique_selling_points?: string;
+  additional_context?: string;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { messages, difficulty, scenario } = await req.json();
+    const { messages, difficulty, scenario, persona, companyProfile } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    const p = persona as Persona | undefined;
+    const cp = companyProfile as CompanyProfile | undefined;
+
+    // Build persona context
+    let personaContext = "";
+    if (p?.name) {
+      personaContext = `\nDEINE IDENTITÄT:
+- Du heißt ${p.name}
+- Deine Position: ${p.role}
+- Dein Unternehmen: ${p.company}
+- Stelle dich bei der Begrüßung mit deinem echten Namen und deiner Position vor.`;
+    }
+
+    // Build seller/product context from company profile
+    let sellerContext = "";
+    if (cp?.company_name || cp?.product_description) {
+      sellerContext = "\nKONTEXT ZUM VERKÄUFER (nutze das, um realistisch zu reagieren):";
+      if (cp.company_name) sellerContext += `\n- Der Verkäufer arbeitet bei: ${cp.company_name}`;
+      if (cp.product_description) sellerContext += `\n- Produkt/Lösung: ${cp.product_description}`;
+      if (cp.target_audience) sellerContext += `\n- Zielgruppe: ${cp.target_audience}`;
+      if (cp.pain_points) sellerContext += `\n- Typische Probleme, die gelöst werden: ${cp.pain_points}`;
+      if (cp.unique_selling_points) sellerContext += `\n- USPs: ${cp.unique_selling_points}`;
+      if (cp.additional_context) sellerContext += `\n- Zusätzlicher Kontext: ${cp.additional_context}`;
+    }
 
     const systemPrompt = `${difficultyPrompts[difficulty] || difficultyPrompts.medium}
 
 SZENARIO: ${scenarioContexts[scenario] || scenarioContexts["cold-call"]}
+${personaContext}
+${sellerContext}
 
 WICHTIGE REGELN:
 - Antworte IMMER auf Deutsch
@@ -57,7 +99,9 @@ WICHTIGE REGELN:
 - Halte dich KURZ (1-3 Sätze pro Antwort) wie in einem echten Telefonat
 - Reagiere natürlich auf das, was der Verkäufer sagt
 - Beginne das Gespräch mit einer kurzen Begrüßung passend zum Szenario
-- Verwende KEINE Markdown-Formatierung, sprich natürlich`;
+- Verwende KEINE Markdown-Formatierung, sprich natürlich
+- Verwende NIEMALS Platzhalter wie [Ihr Name], [Produktname] oder ähnliches – nutze immer die konkreten Namen und Daten aus dem Kontext oben
+- Wenn dir konkrete Informationen fehlen, erfinde plausible Details anstatt Platzhalter zu verwenden`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
