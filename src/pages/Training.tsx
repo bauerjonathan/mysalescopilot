@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Difficulty, TrainingScenario, TrainingPhase, TrainingEvaluation } from "@/types/training";
+import { Difficulty, TrainingScenario, TrainingPhase, TrainingEvaluation, TrainingPersona } from "@/types/training";
 import { TrainingSetup } from "@/components/training/TrainingSetup";
 import { VoiceTrainingChat } from "@/components/training/VoiceTrainingChat";
 import { EvaluationResults } from "@/components/training/EvaluationResults";
@@ -9,12 +9,14 @@ const Training = () => {
   const [phase, setPhase] = useState<TrainingPhase>("setup");
   const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [scenario, setScenario] = useState<TrainingScenario>("cold-call");
+  const [persona, setPersona] = useState<TrainingPersona | undefined>();
   const [transcript, setTranscript] = useState<ChatMessage[]>([]);
   const [evaluation, setEvaluation] = useState<TrainingEvaluation | null>(null);
 
-  const handleStart = (d: Difficulty, s: TrainingScenario) => {
+  const handleStart = (d: Difficulty, s: TrainingScenario, p?: TrainingPersona) => {
     setDifficulty(d);
     setScenario(s);
+    setPersona(p);
     setPhase("chat");
   };
 
@@ -37,6 +39,7 @@ const Training = () => {
         <VoiceTrainingChat
           difficulty={difficulty}
           scenario={scenario}
+          persona={persona}
           onEnd={handleEnd}
         />
       )}
