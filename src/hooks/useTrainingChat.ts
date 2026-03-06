@@ -1,10 +1,18 @@
 import { useState, useCallback, useRef } from "react";
-import { ChatMessage, Difficulty, TrainingScenario } from "@/types/training";
+import { ChatMessage, Difficulty, TrainingScenario, TrainingPersona } from "@/types/training";
+import { CompanyProfile } from "@/hooks/useCompanyProfile";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/training-chat`;
 const TTS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/training-tts`;
 
-export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenario) {
+interface TrainingChatOptions {
+  difficulty: Difficulty;
+  scenario: TrainingScenario;
+  persona?: TrainingPersona;
+  companyProfile?: CompanyProfile;
+}
+
+export function useTrainingChat({ difficulty, scenario, persona, companyProfile }: TrainingChatOptions) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
