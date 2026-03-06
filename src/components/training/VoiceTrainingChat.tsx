@@ -3,8 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Difficulty, TrainingScenario, ChatMessage, TrainingEvaluation } from "@/types/training";
+import { Difficulty, TrainingScenario, ChatMessage, TrainingEvaluation, TrainingPersona } from "@/types/training";
 import { useTrainingChat } from "@/hooks/useTrainingChat";
+import { useCompanyProfile } from "@/hooks/useCompanyProfile";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
 import { Mic, MicOff, Square, Loader2, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface Props {
   difficulty: Difficulty;
   scenario: TrainingScenario;
+  persona?: TrainingPersona;
   onEnd: (messages: ChatMessage[], evaluation: TrainingEvaluation) => void;
 }
 
@@ -23,11 +25,12 @@ const difficultyLabels: Record<Difficulty, { label: string; color: string }> = {
   hard: { label: "Schwer", color: "bg-destructive/10 text-destructive border-destructive/20" },
 };
 
-export function VoiceTrainingChat({ difficulty, scenario, onEnd }: Props) {
+export function VoiceTrainingChat({ difficulty, scenario, persona, onEnd }: Props) {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { profile } = useCompanyProfile();
   const { messages, isLoading, isSpeaking, sendMessage, startConversation, stopAudio } =
-    useTrainingChat(difficulty, scenario);
+    useTrainingChat({ difficulty, scenario, persona, companyProfile: profile });
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [started, setStarted] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
