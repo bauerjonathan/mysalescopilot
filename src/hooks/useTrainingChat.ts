@@ -243,15 +243,9 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
   }, [difficulty, scenario, persona, companyProfile, playTTS]);
 
   const stopAudio = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    stopAudioInternal();
     setIsSpeaking(false);
-  }, []);
+  }, [stopAudioInternal]);
 
   return { messages, isLoading, isSpeaking, sendMessage, startConversation, stopAudio };
 }
