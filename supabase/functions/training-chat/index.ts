@@ -44,6 +44,7 @@ interface Persona {
 }
 
 interface CompanyProfile {
+  seller_name?: string;
   company_name?: string;
   product_description?: string;
   target_audience?: string;
