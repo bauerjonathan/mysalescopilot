@@ -50,6 +50,11 @@ const CompanyProfile = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
+            <Label htmlFor="seller_name">{t("company.sellerName")}</Label>
+            <Input id="seller_name" placeholder={t("company.sellerNamePlaceholder")} value={form.seller_name} onChange={(e) => update("seller_name", e.target.value)} maxLength={100} />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="company_name">{t("company.companyName")}</Label>
             <Input id="company_name" placeholder={t("company.companyNamePlaceholder")} value={form.company_name} onChange={(e) => update("company_name", e.target.value)} maxLength={200} />
           </div>
