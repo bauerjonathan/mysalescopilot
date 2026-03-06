@@ -48,6 +48,11 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
     try {
       stopAudioInternal();
       setIsSpeaking(true);
+      const resp = await fetch(TTS_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ text }),
       });
@@ -72,7 +77,7 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
       console.error("TTS error, using browser fallback:", err);
       playBrowserTTS(text);
     }
-  }, [playBrowserTTS]);
+  }, [stopAudioInternal, playBrowserTTS]);
 
   const sendMessage = useCallback(
     async (userText: string) => {
