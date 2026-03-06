@@ -43,7 +43,11 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("ElevenLabs TTS error:", response.status, errorText);
-      throw new Error(`TTS failed: ${response.status}`);
+      // Return a specific status so the client can fall back to browser TTS
+      return new Response(
+        JSON.stringify({ error: "TTS_UNAVAILABLE", message: "ElevenLabs unavailable, use browser fallback" }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     return new Response(response.body, {
@@ -56,8 +60,8 @@ serve(async (req) => {
   } catch (e) {
     console.error("TTS error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ error: "TTS_UNAVAILABLE", message: e instanceof Error ? e.message : "Unknown error" }),
+      { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

@@ -11,6 +11,19 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
+  const playBrowserTTS = useCallback((text: string) => {
+    if (!('speechSynthesis' in window)) {
+      setIsSpeaking(false);
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "de-DE";
+    utterance.rate = 1.0;
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(utterance);
+  }, []);
+
   const playTTS = useCallback(async (text: string) => {
     try {
       setIsSpeaking(true);
@@ -23,7 +36,11 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
         body: JSON.stringify({ text }),
       });
 
-      if (!resp.ok) throw new Error("TTS failed");
+      if (!resp.ok) {
+        console.warn("ElevenLabs TTS unavailable, falling back to browser TTS");
+        playBrowserTTS(text);
+        return;
+      }
 
       const blob = await resp.blob();
       const url = URL.createObjectURL(blob);
@@ -36,10 +53,10 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
       audio.onerror = () => setIsSpeaking(false);
       await audio.play();
     } catch (err) {
-      console.error("TTS error:", err);
-      setIsSpeaking(false);
+      console.error("TTS error, using browser fallback:", err);
+      playBrowserTTS(text);
     }
-  }, []);
+  }, [playBrowserTTS]);
 
   const sendMessage = useCallback(
     async (userText: string) => {
@@ -204,8 +221,11 @@ export function useTrainingChat(difficulty: Difficulty, scenario: TrainingScenar
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current = null;
-      setIsSpeaking(false);
     }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
   }, []);
 
   return { messages, isLoading, isSpeaking, sendMessage, startConversation, stopAudio };
