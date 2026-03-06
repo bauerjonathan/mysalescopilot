@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 export interface CompanyProfile {
   id?: string;
+  seller_name: string;
   company_name: string;
   product_description: string;
   target_audience: string;
@@ -14,6 +15,7 @@ export interface CompanyProfile {
 }
 
 const defaultProfile: CompanyProfile = {
+  seller_name: "",
   company_name: "",
   product_description: "",
   target_audience: "",

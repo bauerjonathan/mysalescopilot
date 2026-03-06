@@ -44,6 +44,7 @@ interface Persona {
 }
 
 interface CompanyProfile {
+  seller_name?: string;
   company_name?: string;
   product_description?: string;
   target_audience?: string;
@@ -77,8 +78,9 @@ serve(async (req) => {
 
     // Build seller/product context from company profile
     let sellerContext = "";
-    if (cp?.company_name || cp?.product_description) {
+    if (cp?.company_name || cp?.product_description || cp?.seller_name) {
       sellerContext = "\nKONTEXT ZUM VERKÄUFER (nutze das, um realistisch zu reagieren):";
+      if (cp.seller_name) sellerContext += `\n- Der Verkäufer heißt: ${cp.seller_name} – sprich ihn mit diesem Namen an!`;
       if (cp.company_name) sellerContext += `\n- Der Verkäufer arbeitet bei: ${cp.company_name}`;
       if (cp.product_description) sellerContext += `\n- Produkt/Lösung: ${cp.product_description}`;
       if (cp.target_audience) sellerContext += `\n- Zielgruppe: ${cp.target_audience}`;
