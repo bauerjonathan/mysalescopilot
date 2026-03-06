@@ -19,18 +19,30 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
+  const stopAudioInternal = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, []);
+
   const playBrowserTTS = useCallback((text: string) => {
     if (!('speechSynthesis' in window)) {
       setIsSpeaking(false);
       return;
     }
+    stopAudioInternal();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "de-DE";
     utterance.rate = 1.0;
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
-  }, []);
+  }, [stopAudioInternal]);
 
   const playTTS = useCallback(async (text: string) => {
     try {
