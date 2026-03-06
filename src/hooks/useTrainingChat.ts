@@ -89,6 +89,8 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
             messages: updatedMessages,
             difficulty,
             scenario,
+            persona,
+            companyProfile,
           }),
           signal: abortRef.current.signal,
         });
@@ -166,6 +168,8 @@ export function useTrainingChat({ difficulty, scenario, persona, companyProfile 
           messages: [{ role: "user", content: "Hallo?" }],
           difficulty,
           scenario,
+          persona,
+          companyProfile,
         }),
       });
 
