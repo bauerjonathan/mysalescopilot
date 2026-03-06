@@ -22,6 +22,7 @@ export type Database = {
           id: string
           pain_points: string | null
           product_description: string | null
+          seller_name: string | null
           target_audience: string | null
           unique_selling_points: string | null
           updated_at: string
@@ -34,6 +35,7 @@ export type Database = {
           id?: string
           pain_points?: string | null
           product_description?: string | null
+          seller_name?: string | null
           target_audience?: string | null
           unique_selling_points?: string | null
           updated_at?: string
@@ -46,6 +48,7 @@ export type Database = {
           id?: string
           pain_points?: string | null
           product_description?: string | null
+          seller_name?: string | null
           target_audience?: string | null
           unique_selling_points?: string | null
           updated_at?: string
